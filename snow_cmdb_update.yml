@@ -4,6 +4,11 @@
   gather_facts: false
   connection: local
 
+  vars:
+    owner: "{{ create_vm_aws_owner_tag }}"
+    ip_addr: "{{ public_ip }}"
+    classification: "{{ vm_environment }}"
+    os: "Linux Red Hat"
+
   roles:
     - demo.process.snow_cmdb
-
