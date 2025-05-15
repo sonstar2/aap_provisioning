@@ -1,6 +1,6 @@
 ---
 - name: Setup webserver and copy custom webpage
-  hosts: "{{ _hosts | default(omit) }}"
+  hosts: "{{ create_vm_vm_name | default(omit) }}"
   become: true
   gather_facts: true
 

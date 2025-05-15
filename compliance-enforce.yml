@@ -1,6 +1,6 @@
 ---
 - name: Apply compliance profile
-  hosts: "{{ _hosts | default(omit) }}"
+  hosts: "{{ create_vm_vm_name | default(omit) }}"
   become: true
   vars:
     compliance_profile: undef
