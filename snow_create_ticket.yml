@@ -1,6 +1,6 @@
 ---
 - name: Create an incident in ServiceNow using facts from a host
-  hosts: "{{ vm_name | default('all')}}"
+  hosts: "{{ create_vm_vm_name | default('all')}}"
   gather_facts: false
   connection: local
 
@@ -8,19 +8,10 @@
   - name: Set variables
     ansible.builtin.set_fact:
       servicenow_ticket: create_slack
-      incident_description: "Patch has been failed"
+      incident_description: "Provisioning has been failed"
       sn_description: |-
-        Patch has been failed with the following servers and restored from snapshot successfully!!
-        hostname | failed Stage
-        --------------------------
-        {{ failed_hosts }}
-    vars:
-      failed_hosts: >-
-        {% for host in groups['all'] %}
-        {{ host  if ( patch_progress[host] == 'fail' ) }}
-        {{ '| ' if ( patch_progress[host] == 'fail' ) }}
-        {{ patch_stage[host] if ( patch_progress[host] == 'fail' ) }}
-        {% endfor %}
+        Provisioning has been failed with the following server!!
+        hostname: {{ inventory_hostname }}
       
     run_once: yes
 
