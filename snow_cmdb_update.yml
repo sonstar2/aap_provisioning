@@ -7,7 +7,7 @@
   vars:
     owner: "{{ create_vm_aws_owner_tag }}"
     ip_addr: "{{ public_ip }}"
-    classification: "{{ vm_environment }}"
+    classification: "Development"
     os: "Linux Red Hat"
 
   roles:
