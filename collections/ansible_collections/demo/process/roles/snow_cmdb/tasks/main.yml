@@ -3,7 +3,7 @@
   servicenow.itsm.configuration_item:
     state: "{{ status | default('present')}}"
     asset_tag: "{{ owner | default(omit) }}"
-    name: "{{ inventory_hostname }}"
+    name: "{{ create_vm_vm_name }}"
     ip_address: "{{ ip_addr | default(omit) }}"
     sys_class_name: cmdb_ci_server
     sys_id: "{{ sys_id | default(omit) }}"
@@ -11,5 +11,5 @@
       classification: "{{ env | default(omit) }}"
       fqdn: "{{ fqdn | default(omit) }}"
       os: "{{ os | default(omit) }}"
-      host_name: "{{ inventory_hostname }}"
+      host_name: "{{ create_vm_vm_name }}"
   delegate_to: localhost
