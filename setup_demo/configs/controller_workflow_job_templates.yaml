@@ -108,9 +108,6 @@ controller_workflows:
         limit: ""
         organization: "ACC"
         all_parents_must_converge: "False"
-        extra_data:
-          _hosts: all
-          compliance_profile: cis
         always_nodes:
           - "2fc31373-8f29-4fdc-8464-bc8d8d745dd8"
         failure_nodes:
