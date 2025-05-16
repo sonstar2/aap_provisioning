@@ -2,6 +2,7 @@
 eda_projects:
   - name: "Remediation Incident"
     description: ""
+    url: https://github.com/sonstar2/ansible_devops_demo.git
     organization: "2"
     scm_type: "git"
     scm_branch: ""
