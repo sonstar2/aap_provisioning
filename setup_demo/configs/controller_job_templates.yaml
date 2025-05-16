@@ -45,7 +45,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Remediate Incident"
     description: !unsafe ''
     organization: "ACC"
@@ -92,7 +92,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Close Incident Detail"
     description: !unsafe ''
     organization: "ACC"
@@ -138,7 +138,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Create SNOW Change Record"
     description: !unsafe ''
     organization: "ACC"
@@ -184,7 +184,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Close SNOW Change Record"
     description: !unsafe ''
     organization: "ACC"
