@@ -162,12 +162,6 @@ controller_templates:
     start_at_task: ""
     timeout: 0
     host_config_key: ""
-    notification_templates_error:
-      - "Telemetry"
-    notification_templates_started:
-      - "Telemetry"
-    notification_templates_success:
-      - "Telemetry"
     survey_enabled: true
     survey_spec:
       name: ""
@@ -229,12 +223,6 @@ controller_templates:
     start_at_task: ""
     timeout: 0
     host_config_key: ""
-    notification_templates_error:
-      - "Telemetry"
-    notification_templates_started:
-      - "Telemetry"
-    notification_templates_success:
-      - "Telemetry"
     survey_enabled: true
     survey_spec:
       name: ""
@@ -305,12 +293,6 @@ controller_templates:
     start_at_task: ""
     timeout: 0
     host_config_key: ""
-    notification_templates_error:
-      - "Telemetry"
-    notification_templates_started:
-      - "Telemetry"
-    notification_templates_success:
-      - "Telemetry"
     survey_enabled: false
     become_enabled: false
     diff_mode: false
