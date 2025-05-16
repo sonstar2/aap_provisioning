@@ -1,0 +1,9 @@
+---
+gateway_role_user_assignments:
+  - role_definition: "Organization Member"
+    object_id: "2"
+    user: "acc_admin"
+  - role_definition: "Organization Admin"
+    object_id: "2"
+    user: "acc_admin"
+...

@@ -1,0 +1,9 @@
+---
+eda_projects:
+  - name: "Remediation Incident"
+    description: ""
+    organization: "2"
+    scm_type: "git"
+    scm_branch: ""
+    scm_refspec: ""
+...

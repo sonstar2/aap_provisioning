@@ -1,0 +1,31 @@
+---
+controller_projects:
+  - name: "DevOps"
+    description: !unsafe ''
+    organization: "ACC"
+    scm_type: "git"
+    scm_url: "https://github.com/sonstar2/ansible_devops_demo.git"
+    scm_branch: ""
+    scm_clean: true
+    scm_delete_on_update: true
+    scm_update_on_launch: false
+    scm_update_cache_timeout: "0"
+    scm_refspec: ""
+    allow_override: false
+    update_project: false
+    timeout: "0"
+  - name: "AAP Provisioning"
+    description: !unsafe ''
+    organization: "ACC"
+    scm_type: "git"
+    scm_url: "https://github.com/sonstar2/aap_provisioning.git"
+    scm_branch: ""
+    scm_clean: false
+    scm_delete_on_update: false
+    scm_update_on_launch: false
+    scm_update_cache_timeout: "0"
+    scm_refspec: ""
+    allow_override: false
+    update_project: false
+    timeout: "0"
+...

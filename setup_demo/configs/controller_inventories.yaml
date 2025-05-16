@@ -1,0 +1,6 @@
+---
+controller_inventories:
+  - name: "SNOW"
+    description: !unsafe ''
+    organization: "ACC"
+    prevent_instance_group_fallback: False

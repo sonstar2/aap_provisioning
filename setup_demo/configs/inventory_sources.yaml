@@ -1,0 +1,14 @@
+---
+controller_inventory_sources:
+  - name: "now"
+    description: !unsafe ''
+    organization: "ACC"
+    source: "scm"
+    limit: ""
+    source_project: "DevOps"
+    source_path: "demo_snow/inventory.now.yaml"
+    inventory: "SNOW"
+    update_on_launch: "False"
+    overwrite: "True"
+    credential: "SNOW"
+...

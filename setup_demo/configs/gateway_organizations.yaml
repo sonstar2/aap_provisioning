@@ -1,0 +1,5 @@
+---
+gateway_organizations:
+  - name: "ACC"
+    description: !unsafe ''
+...
