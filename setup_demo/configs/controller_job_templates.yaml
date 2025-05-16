@@ -1,5 +1,322 @@
 ---
 controller_templates:
+  - name: "Cloud / AWS / Create VM"
+    description: !unsafe ''
+    organization: "Default"
+    project: "Ansible Cloud Content Lab - AWS"
+    inventory: "Demo Inventory"
+    playbook: "playbooks/create_vm.yml"
+    scm_branch: ""
+    forks: 0
+    limit: ""
+    verbosity: 0
+    job_type: "run"
+    job_slice_count: 1
+    use_fact_cache: false
+    credentials:
+      - "AWS"
+      - "Demo Credential"
+    allow_simultaneous: true
+    ask_scm_branch_on_launch: false
+    ask_diff_mode_on_launch: false
+    ask_tags_on_launch: false
+    ask_skip_tags_on_launch: false
+    ask_job_type_on_launch: false
+    ask_verbosity_on_launch: false
+    ask_variables_on_launch: false
+    ask_inventory_on_launch: false
+    ask_limit_on_launch: false
+    ask_credential_on_launch: false
+    ask_execution_environment_on_launch: false
+    ask_labels_on_launch: false
+    ask_forks_on_launch: false
+    ask_job_slice_count_on_launch: false
+    ask_timeout_on_launch: false
+    ask_instance_groups_on_launch: false
+    extra_vars: ""
+    job_tags: ""
+    force_handlers: false
+    skip_tags: ""
+    start_at_task: ""
+    timeout: 0
+    host_config_key: ""
+    notification_templates_error:
+      - "Telemetry"
+    notification_templates_started:
+      - "Telemetry"
+    notification_templates_success:
+      - "Telemetry"
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      spec:
+        - type: multiplechoice
+          choices:
+            - us-east-1
+            - us-east-2
+            - us-west-1
+            - us-west-2
+          required: True
+          variable: create_vm_aws_region
+          question_name: !unsafe "AWS Region"
+        - type: text
+          required: True
+          variable: create_vm_vm_name
+          question_name: !unsafe "Name"
+        - type: text
+          required: True
+          variable: create_vm_vm_owner
+          question_name: !unsafe "Owner"
+        - type: text
+          required: True
+          variable: create_vm_vm_deployment
+          question_name: !unsafe "Deployment"
+        - type: text
+          default: !unsafe "demo"
+          required: True
+          variable: create_vm_vm_purpose
+          question_name: !unsafe "Purpose"
+        - type: multiplechoice
+          choices:
+            - Dev
+            - QA
+            - Prod
+          required: True
+          variable: create_vm_vm_environment
+          question_name: !unsafe "Environment"
+        - type: multiplechoice
+          choices:
+            - windows_core
+            - windows_full
+            - rhel9
+            - rhel8
+            - rhel7
+            - al2023
+          required: True
+          variable: vm_blueprint
+          question_name: !unsafe "Blueprint"
+        - type: text
+          default: !unsafe "aws-test-subnet"
+          required: True
+          variable: create_vm_aws_vpc_subnet_name
+          question_name: !unsafe "Subnet"
+        - type: text
+          default: !unsafe "aws-test-sg"
+          required: True
+          variable: create_vm_aws_securitygroup_name
+          question_name: !unsafe "Security Group"
+        - type: text
+          default: !unsafe "aws-test-key"
+          required: True
+          variable: create_vm_aws_keypair_name
+          question_name: !unsafe "SSH Keypair"
+        - type: text
+          required: False
+          variable: create_vm_aws_instance_size
+          question_name: !unsafe "AWS Instance Type (defaults to blueprint value)"
+        - type: text
+          required: False
+          variable: create_vm_aws_image_filter
+          question_name: !unsafe "AWS Image Filter (defaults to blueprint value)"
+      description: ""
+    become_enabled: false
+    diff_mode: false
+    webhook_service: ""
+    prevent_instance_group_fallback: false
+  - name: "Cloud / AWS / Create VPC"
+    description: !unsafe ''
+    organization: "Default"
+    project: "Ansible Product Demos"
+    inventory: "Demo Inventory"
+    playbook: "cloud/create_vpc.yml"
+    scm_branch: ""
+    forks: 0
+    limit: ""
+    verbosity: 0
+    job_type: "run"
+    job_slice_count: 1
+    use_fact_cache: false
+    credentials:
+      - "AWS"
+    allow_simultaneous: false
+    ask_scm_branch_on_launch: false
+    ask_diff_mode_on_launch: false
+    ask_tags_on_launch: false
+    ask_skip_tags_on_launch: false
+    ask_job_type_on_launch: false
+    ask_verbosity_on_launch: false
+    ask_variables_on_launch: false
+    ask_inventory_on_launch: false
+    ask_limit_on_launch: false
+    ask_credential_on_launch: false
+    ask_execution_environment_on_launch: false
+    ask_labels_on_launch: false
+    ask_forks_on_launch: false
+    ask_job_slice_count_on_launch: false
+    ask_timeout_on_launch: false
+    ask_instance_groups_on_launch: false
+    extra_vars: ""
+    job_tags: ""
+    force_handlers: false
+    skip_tags: ""
+    start_at_task: ""
+    timeout: 0
+    host_config_key: ""
+    notification_templates_error:
+      - "Telemetry"
+    notification_templates_started:
+      - "Telemetry"
+    notification_templates_success:
+      - "Telemetry"
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      spec:
+        - type: multiplechoice
+          choices:
+            - us-east-1
+            - us-east-2
+            - us-west-1
+            - us-west-2
+          required: True
+          variable: create_vm_aws_region
+          question_name: !unsafe "AWS Region"
+        - type: text
+          required: True
+          variable: aws_owner_tag
+          question_name: !unsafe "Owner"
+      description: ""
+    become_enabled: false
+    diff_mode: false
+    webhook_service: ""
+    prevent_instance_group_fallback: false    
+  - name: "Cloud / AWS / Create Keypair"
+    description: !unsafe ''
+    organization: "Default"
+    project: "Ansible Product Demos"
+    inventory: "Demo Inventory"
+    playbook: "cloud/aws_key.yml"
+    scm_branch: ""
+    forks: 0
+    limit: ""
+    verbosity: 0
+    job_type: "run"
+    job_slice_count: 1
+    use_fact_cache: false
+    credentials:
+      - "AWS"
+    allow_simultaneous: false
+    ask_scm_branch_on_launch: false
+    ask_diff_mode_on_launch: false
+    ask_tags_on_launch: false
+    ask_skip_tags_on_launch: false
+    ask_job_type_on_launch: false
+    ask_verbosity_on_launch: false
+    ask_variables_on_launch: false
+    ask_inventory_on_launch: false
+    ask_limit_on_launch: false
+    ask_credential_on_launch: false
+    ask_execution_environment_on_launch: false
+    ask_labels_on_launch: false
+    ask_forks_on_launch: false
+    ask_job_slice_count_on_launch: false
+    ask_timeout_on_launch: false
+    ask_instance_groups_on_launch: false
+    extra_vars: ""
+    job_tags: ""
+    force_handlers: false
+    skip_tags: ""
+    start_at_task: ""
+    timeout: 0
+    host_config_key: ""
+    notification_templates_error:
+      - "Telemetry"
+    notification_templates_started:
+      - "Telemetry"
+    notification_templates_success:
+      - "Telemetry"
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      spec:
+        - type: multiplechoice
+          choices:
+            - us-east-1
+            - us-east-2
+            - us-west-1
+            - us-west-2
+          required: True
+          variable: create_vm_aws_region
+          question_name: !unsafe "AWS Region"
+        - type: text
+          default: !unsafe "aws-test-key"
+          required: True
+          variable: aws_key_name
+          question_name: !unsafe "Keypair Name"
+        - type: textarea
+          required: True
+          variable: aws_public_key
+          question_name: !unsafe "Keypair Public Key"
+        - type: text
+          required: True
+          variable: aws_keypair_owner
+          question_name: !unsafe "Owner"
+      description: ""
+    become_enabled: false
+    diff_mode: false
+    webhook_service: ""
+    prevent_instance_group_fallback: false
+  - name: "Cloud / AWS / Display EC2 Stats"
+    description: !unsafe ''
+    organization: "Default"
+    project: "Ansible Product Demos"
+    inventory: "Demo Inventory"
+    playbook: "cloud/display-ec2-stats.yml"
+    scm_branch: ""
+    forks: 0
+    limit: ""
+    verbosity: 0
+    job_type: "run"
+    job_slice_count: 1
+    use_fact_cache: false
+    credentials:
+      - "AWS"
+    allow_simultaneous: false
+    ask_scm_branch_on_launch: false
+    ask_diff_mode_on_launch: false
+    ask_tags_on_launch: false
+    ask_skip_tags_on_launch: false
+    ask_job_type_on_launch: false
+    ask_verbosity_on_launch: false
+    ask_variables_on_launch: false
+    ask_inventory_on_launch: false
+    ask_limit_on_launch: false
+    ask_credential_on_launch: false
+    ask_execution_environment_on_launch: false
+    ask_labels_on_launch: false
+    ask_forks_on_launch: false
+    ask_job_slice_count_on_launch: false
+    ask_timeout_on_launch: false
+    ask_instance_groups_on_launch: false
+    extra_vars: ""
+    job_tags: ""
+    force_handlers: false
+    skip_tags: ""
+    start_at_task: ""
+    timeout: 0
+    host_config_key: ""
+    notification_templates_error:
+      - "Telemetry"
+    notification_templates_started:
+      - "Telemetry"
+    notification_templates_success:
+      - "Telemetry"
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    webhook_service: ""
+    prevent_instance_group_fallback: false
+
   - name: "Get Incident Detail"
     description: !unsafe ''
     organization: "ACC"
