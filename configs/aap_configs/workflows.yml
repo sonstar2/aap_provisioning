@@ -1,0 +1,196 @@
+---
+
+controller_workflows:
+  - name: '[Prod]Apply E8 Security Harden'
+    description: A workflow to Apply E8 Harden to Prod
+    extra_vars: ''
+    survey_enabled: false
+    allow_simultaneous: true
+    ask_variables_on_launch: true
+    inventory:
+    limit:
+    scm_branch:
+    ask_inventory_on_launch: false
+    ask_scm_branch_on_launch: false
+    ask_limit_on_launch: false
+    webhook_service: ''
+    webhook_credential:
+    organization: Default
+    schedules: []
+    simplified_workflow_nodes:
+      - identifier: Project Sync
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Compliance_Digital_Twin_Project
+        success_nodes:
+          - E8 Security Harden
+      - identifier: E8 Security Harden
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: E8 Security Harden
+        extra_data:
+          _hosts: "prod_rhel9"
+          compliance_profile: "e8"
+        success_nodes:
+          - Slack Notification
+          - Validate Application Function
+          - Security Scan and Report
+      - identifier: Slack Notification
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Slack Notification
+        extra_data:
+          slack_message_type: "merge_approval"
+      - identifier: Validate Application Function
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Validate Web App
+      - identifier: Security Scan and Report
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Multi-profile Compliance Report
+        extra_data:
+          _hosts: "prod_rhel9"
+          compliance_profile: "e8"
+
+  - name: Deploy Digital Twins in AWS
+    description: A workflow to deploy a cloud stack
+    extra_vars: ''
+    survey_enabled: false
+    allow_simultaneous: true
+    ask_variables_on_launch: true
+    inventory:
+    limit:
+    scm_branch: devel
+    ask_inventory_on_launch: false
+    ask_scm_branch_on_launch: false
+    ask_limit_on_launch: false
+    webhook_service: ''
+    webhook_credential:
+    organization: Default
+    schedules: []
+    simplified_workflow_nodes:
+      - identifier:  Create VPC
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Cloud / AWS / Create VPC
+        organization: Default
+        credentials: []
+        success_nodes:
+          - Deploy VM
+        failure_nodes: []
+        always_nodes: []
+        extra_data:
+          create_vm_aws_region: "ap-southeast-2"
+          aws_owner_tag: "Frederick"
+      - identifier: Deploy VM
+        all_parents_must_converge: false
+        # workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Cloud / AWS / Create VM
+        success_nodes:
+          - Update Inventory
+          - Project Sync
+        failure_nodes: []
+        always_nodes: []
+        extra_data:
+          create_vm_aws_region: "ap-southeast-2"
+          create_vm_vm_name: "dt_rhel9"
+          create_vm_vm_owner: "Frederick"
+          create_vm_vm_deployment: "fred_race_demo"
+          create_vm_vm_environment: "Dev"
+          vm_blueprint: "rhel9"
+          create_vm_aws_vpc_subnet_name: "aws-test-subnet"
+          create_vm_aws_securitygroup_name: "aws-test-sg"
+          create_vm_aws_keypair_name: "fred_labtop"
+          create_vm_aws_instance_size: "t2.large"
+      - identifier: Update Inventory
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: AWS Inventory
+        success_nodes:
+          - Install Application
+      - identifier: Project Sync
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Compliance_Digital_Twin_Project [DEVEL]
+        success_nodes:
+          - Install Application
+      - identifier: Install Application
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Install Web Application
+        success_nodes:
+          - E8 Security Harden
+        extra_data:
+          _hosts: "dt_rhel9"
+          web_server_type: "web"
+      - identifier: E8 Security Harden
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: E8 Security Harden
+        success_nodes:
+          - Application Testing
+          - Security Testing
+          - Regression Testing
+          - System Testing
+        extra_data:
+          compliance_profile: "e8"
+      - identifier: Application Testing
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Validate Web App
+        success_nodes:
+          - Generate Report
+        failure_nodes:
+          - Fail Notification
+      - identifier: Security Testing
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Dummy Task
+        success_nodes:
+          - Generate Report
+        failure_nodes:
+          - Fail Notification
+      - identifier: Regression Testing
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Dummy Task
+        success_nodes:
+          - Generate Report
+        failure_nodes:
+          - Fail Notification
+      - identifier: System Testing
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Dummy Task
+        success_nodes:
+          - Generate Report
+        failure_nodes:
+          - Fail Notification
+      - identifier: Generate Report
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Multi-profile Compliance Report
+        success_nodes:
+          - Slack Notification
+          - Delete Digital Twins
+      - identifier: Fail Notification
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Dummy Task
+      - identifier: Slack Notification
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Slack Notification
+        extra_data:
+          slack_message_type: "pull_request"
+      - identifier: Delete Digital Twins
+        all_parents_must_converge: false
+        workflow_job_template: Deploy Digital Twins in AWS
+        unified_job_template: Cloud / AWS / Delete VM
+        extra_data:
+          _hosts: "dt_rhel9"
+    notification_templates_started: []
+    notification_templates_success: []
+    notification_templates_error: []
+    notification_templates_approvals: []
