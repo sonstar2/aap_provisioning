@@ -1,0 +1,5 @@
+---
+controller_execution_environments:
+  - name: "SNOW execution environment"
+    description: ""
+    image_url: "quay.io/fredmkson/ee_snow:latest"

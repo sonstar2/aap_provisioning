@@ -223,7 +223,7 @@ controller_templates:
     skip_tags: ""
     start_at_task: ""
     timeout: 0
-    execution_environment: "Hub Terraform RHEL9"
+    execution_environment: "SNOW execution environment"
     host_config_key: ""
     survey_enabled: true
     survey_spec:
