@@ -246,7 +246,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Create Incident Ticket"
     description: !unsafe ''
     organization: "ACC"
@@ -292,7 +292,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Close Incident Ticket"
     description: !unsafe ''
     organization: "ACC"
@@ -338,7 +338,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Create SNOW CI"
     description: !unsafe ''
     organization: "ACC"
@@ -384,7 +384,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Create Web Application"
     description: !unsafe ''
     organization: "ACC"
@@ -429,7 +429,7 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+
   - name: "Security Harden"
     description: !unsafe ''
     organization: "ACC"
@@ -492,4 +492,4 @@ controller_templates:
     diff_mode: false
     webhook_service: ""
     prevent_instance_group_fallback: false
-...
+

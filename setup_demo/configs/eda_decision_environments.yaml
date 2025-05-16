@@ -15,4 +15,4 @@ eda_decision_environments:
     image_url: "ip-172-31-7-190.ap-southeast-2.compute.internal/de_snow:latest"
     organization: "ACC"
     eda_credential: "Hub Decision Environment Container Registry"
-...
+

@@ -11,4 +11,4 @@ controller_inventory_sources:
     update_on_launch: "False"
     overwrite: "True"
     credential: "SNOW"
-...
+

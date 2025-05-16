@@ -6,4 +6,4 @@ eda_projects:
     scm_type: "git"
     scm_branch: ""
     scm_refspec: ""
-...
+
