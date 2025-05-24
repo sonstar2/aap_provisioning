@@ -17,9 +17,9 @@
         
   - name: Create Windows 2019 vSphere guest
     community.vmware.vmware_guest:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
+      # hostname: "{{ vcenter_hostname }}"
+      # username: "{{ vcenter_username }}"
+      # password: "{{ vcenter_password }}"
       validate_certs: no
       datacenter: "{{ datacenter_name }}"
       cluster: '{{ cluster_name }}'
