@@ -10,10 +10,10 @@
       network_detail:
         - name: 'segment-sandbox-gqvwr'
           type: 'dhcp'
-      datacenter_name: 'SDDC-Datacenter'
-      cluster_name: 'Cluster-1'
-      win_template_name: 'windows 2019 Server Template'
-      vcenter_folder: 'sandbox-gqvwr'
+      # datacenter_name: 'SDDC-Datacenter'
+      # cluster_name: 'Cluster-1'
+      # win_template_name: 'windows 2019 Server Template'
+      # vcenter_folder: 'sandbox-gqvwr'
         
   - name: Create Windows 2019 vSphere guest
     community.vmware.vmware_guest:
@@ -25,7 +25,8 @@
       cluster: '{{ cluster_name }}'
       name: "{{ vm_name }}"
       template: "{{ win_template_name }}" 
-      folder: /{{ datacenter_name }}/Workloads/{{ vcenter_folder }}
+      folder: "{{ folder_path }}"
+      # folder: /{{ datacenter_name }}/Workloads/{{ vcenter_folder }}
       # disk:
       # - size_gb: '{{ guest_disksize }}'
       #   type: "{{ omit if(guest_disktype == 'thick') else guest_disktype }}"
