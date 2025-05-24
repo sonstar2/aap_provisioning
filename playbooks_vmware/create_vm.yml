@@ -38,7 +38,7 @@
       #   scsi: paravirtual
       networks: "{{ network_detail }}"
       customization:
-        autologon: yes
+        # autologon: yes
         hostname: "{{ vm_name }}"
         # password: "{{ vm_password }}" 
         runonce:
