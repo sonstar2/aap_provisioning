@@ -1,0 +1,13 @@
+---
+- name: Send e-mail Notification
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: Sending an e-mail u
+    community.general.mail:
+      host: localhost
+      port: 25
+      to: "{{ var_mail_to }}"
+      subject: Ansible-report
+      body: System {{ ansible_hostname }} has been successfully provisioned.
+    delegate_to: localhost

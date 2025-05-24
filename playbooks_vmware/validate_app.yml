@@ -1,0 +1,19 @@
+- name: Validate Webserver
+  hosts: all
+  gather_facts: false
+
+  tasks:
+
+    - name: Check Web Page
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}"
+        return_content: true
+      register: web_output
+      changed_when: false
+      delegate_to: localhost
+
+    - name: Output
+      ansible.builtin.debug:
+        msg:
+          - "Contents of web page:"
+          - "{{ web_output.content }}"

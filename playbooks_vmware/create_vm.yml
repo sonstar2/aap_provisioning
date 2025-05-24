@@ -1,0 +1,53 @@
+---
+- name: Create Windows VM
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+
+  - name: Set Network detail
+    set_fact:
+      network_detail:
+        - name: 'segment-sandbox-gqvwr'
+          type: 'dhcp'
+      datacenter_name: 'SDDC-Datacenter'
+      cluster_name: 'Cluster-1'
+      win_template_name: 'windows 2019 Server Template'
+      vcenter_folder: 'sandbox-gqvwr'
+        
+  - name: Create Windows 2019 vSphere guest
+    community.vmware.vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      datacenter: "{{ datacenter_name }}"
+      cluster: '{{ cluster_name }}'
+      name: "{{ vm_name }}"
+      template: "{{ win_template_name }}" 
+      folder: /{{ datacenter_name }}/Workloads/{{ vcenter_folder }}
+      # disk:
+      # - size_gb: '{{ guest_disksize }}'
+      #   type: "{{ omit if(guest_disktype == 'thick') else guest_disktype }}"
+      #   datastore: "{{ vcenter_datacenters[dc_name].prod_datastore if (win_system_profile == 'Production Servers') else vcenter_datacenters[dc_name].dev_datastore  }}"
+      # hardware:
+      #   memory_mb: '{{ guest_memorysize | int * 1024 }}'
+      #   num_cpus: '{{ guest_cpus }}'
+      #   num_cpu_cores_per_socket: '{{ guest_cpus }}'
+      #   scsi: paravirtual
+      networks: "{{ network_detail }}"
+      customization:
+        autologon: yes
+        hostname: "{{ vm_name }}"
+        # password: "{{ vm_password }}" 
+        runonce:
+        - powershell.exe -ExecutionPolicy Unrestricted -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert -EnableCredSSP
+      wait_for_customization: yes
+      wait_for_ip_address: yes
+      state: poweredon
+    delegate_to: localhost
+    register: create_vm
+
+  - name: Return vSphere Guets info
+    debug:
+      msg: "{{ create_vm }}" 
