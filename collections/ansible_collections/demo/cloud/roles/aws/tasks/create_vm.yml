@@ -78,6 +78,11 @@
         image_id: "{{ create_vm_aws_instance_ami | trim }}"
         region: "{{ create_vm_aws_region }}"
         security_group: "{{ create_vm_aws_securitygroup_name }}"
+        volumes:
+          - device_name: /dev/sda1
+            ebs:
+              volume_size: 100
+              delete_on_termination: true
         tags:
           Name: "{{ create_vm_vm_name }}"
           blueprint: "{{ create_vm_vm_blueprint }}"
