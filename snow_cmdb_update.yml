@@ -1,14 +1,15 @@
 ---
 - name: Update CMDB table
-  hosts: "{{ create_vm_vm_name | default('all')}}"
+  hosts: all
   # gather_facts: false
   # connection: local
 
   vars:
+    create_vm_vm_name: "{{ inventory_hostname }}"
     owner: "{{ create_vm_aws_owner_tag }}"
     ip_addr: "{{ public_ip }}"
     classification: "Development"
-    os: "Linux Red Hat"
+    os: "{{ ansible_distribution }}"
 
   roles:
     - demo.process.snow_cmdb
