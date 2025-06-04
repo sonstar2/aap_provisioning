@@ -7,3 +7,5 @@ collections:
   - name: community.vmware
 
   - name: ansible.windows
+
+  - name: lab.aws_infrastructure_config_demos
