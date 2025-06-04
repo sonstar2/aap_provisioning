@@ -35,7 +35,7 @@
         path: 'c:\temp\rhel10-disk0.vhd'
         state: present
 
-  - name: add almalinux9 iso to test vm 
+  - name: add RHEL10 iso to test vm 
     gocallag.hyperv.vm_dvddrive:   
         id: '{{ info.output.value[0].Id }}'
         path: c:\temp\rhel-10.0-x86_64-boot.iso
