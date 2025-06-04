@@ -7,7 +7,7 @@
   vars:
     servicenow_cr: create_wait
     cr_short_description: "Provision Change Request"
-    cr_description: "{{ change_owner | default('Ansible') }} requests a server in {{ change_environment | default('Dev') }} to provision"
+    cr_description: "{{ change_owner | default('Ansible') }} requests {{ ansible_play_hosts_all }} in {{ change_environment | default('Dev') }} to provision"
 
   roles:
     - demo.process.snow_change_request
