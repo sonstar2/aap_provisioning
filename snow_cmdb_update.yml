@@ -5,7 +5,7 @@
   # connection: local
   tasks:
   - name: Create CMDB CI
-    ansible.builtin.include_role:
+    ansible.builtin.import_role:
       name: demo.process.snow_cmdb
     vars:
       create_vm_vm_name: "{{ inventory_hostname }}"
