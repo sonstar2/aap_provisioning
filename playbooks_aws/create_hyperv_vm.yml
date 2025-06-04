@@ -1,6 +1,7 @@
 ---
 - name: linux-hyperv
   hosts: "{{ hyperv_host_name | default(omit) }}"
+  gather_facts: false
   
   tasks:
   - name: Create switch LAB-Test that is bridged to Adapter "Ethernet"
