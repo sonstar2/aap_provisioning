@@ -5,3 +5,5 @@ collections:
   - name: servicenow.itsm
 
   - name: community.vmware
+
+  - name: ansible.windows
