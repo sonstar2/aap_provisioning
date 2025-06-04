@@ -1,0 +1,23 @@
+---
+- name: Install Hyper-V
+  hosts: "{{ hyperv_host_name | default(omit) }}"
+  gather_facts: no
+  tasks:
+    - name: Install Hyper-V with GUI and PowerShell tools
+      win_feature:
+        name:
+          - Hyper-V
+          - RSAT-Hyper-V-Tools
+          - Hyper-V-PowerShell
+        state: present
+        include_sub_features: yes
+        include_management_tools: yes
+      register: install_result
+
+    - name: Reboot if necessary
+      win_reboot:
+      when: install_result.reboot_required
+
+    - name: Wait for WinRM to come back
+      pause:
+        seconds: 60
