@@ -61,6 +61,6 @@
         - name: "UserC"
           groups:
             set:
-              -GroupC
+              - GroupC
       retries: 5
       delay: 10
