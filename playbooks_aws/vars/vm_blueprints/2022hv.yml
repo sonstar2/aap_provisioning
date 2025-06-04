@@ -1,5 +1,5 @@
 ---
-create_vm_aws_image_filter: 'Microsoft Windows Server 2022 Base*'
+create_vm_aws_image_filter: 'Windows_Server-2022-English-Full-Base*'
 create_vm_aws_instance_size: i3.metal
 create_vm_aws_userdata_template: aws_windows_userdata
 create_vm_aws_image_owners: "amazon"
