@@ -1,0 +1,5 @@
+---
+create_vm_aws_image_filter: 'Hyper-v-2022-2024.09.26.084538*'
+create_vm_aws_instance_size: i3.metal
+create_vm_aws_userdata_template: aws_windows_userdata
+create_vm_aws_image_owners: "679593333241"
