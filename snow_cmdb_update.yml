@@ -11,6 +11,7 @@
     classification: "Development"
     os: "{{ ansible_distribution }}"
 
-  roles:
-    - demo.process.snow_cmdb
-  delegate_to: localhost
+  tasks:
+    ansible.builtin.include_role:
+      name: demo.process.snow_cmdb
+    delegate_to: localhost
