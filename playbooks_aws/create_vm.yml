@@ -23,4 +23,4 @@
     - name: Include create vm role
       ansible.builtin.include_role:
         name: demo.cloud.aws
-        task_from: create_vm.yml
+        tasks_from: create_vm.yml
