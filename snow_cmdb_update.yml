@@ -7,10 +7,10 @@
   - name: Create CMDB CI
     ansible.builtin.include_role:
       name: demo.process.snow_cmdb
-      delegation: localhost
     vars:
       create_vm_vm_name: "{{ inventory_hostname }}"
       owner: "{{ create_vm_aws_owner_tag }}"
       ip_addr: "{{ public_ip }}"
       classification: "Development"
       os: "{{ ansible_distribution }}"
+    delegate_to: localhost
