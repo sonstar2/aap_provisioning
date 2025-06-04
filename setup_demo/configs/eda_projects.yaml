@@ -1,8 +1,8 @@
 ---
-# eda_projects:
-#   - name: "Remediation Incident"
-#     description: ""
-#     url: "https://github.com/sonstar2/ansible_devops_demo.git"
-#     organization: "ACC"
+eda_projects:
+  - name: "Remediation Incident"
+    description: ""
+    url: "https://github.com/sonstar2/ansible_devops_demo.git"
+    organization: "ACC"
 
 

@@ -1,6 +1,6 @@
 ---
-# eda_rulebook_activations:
-#   - name: "Remediation Incident"
-#     description: ""
-#     project: "Remediation Incident"
-#     rulebook: "snow_incident_listener.yml"
+eda_rulebook_activations:
+  - name: "Remediation Incident"
+    description: ""
+    project: "Remediation Incident"
+    rulebook: "snow_incident_listener.yml"

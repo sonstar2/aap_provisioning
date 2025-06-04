@@ -1,8 +1,8 @@
 ---
 - name: Update CMDB table
-  hosts: localhost
-  gather_facts: false
-  connection: local
+  hosts: "{{ create_vm_vm_name | default('all')}}"
+  # gather_facts: false
+  # connection: local
 
   vars:
     owner: "{{ create_vm_aws_owner_tag }}"
@@ -12,3 +12,4 @@
 
   roles:
     - demo.process.snow_cmdb
+  delegate_to: localhost

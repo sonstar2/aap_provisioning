@@ -1,0 +1,16 @@
+---
+- name: Apply compliance profile for Windows
+  hosts: "{{ vm_name | default('all') }}"
+
+  tasks:
+    # - name: Check os type
+    #   ansible.builtin.assert:
+    #     that: "ansible_os_family == 'RedHat'"
+    #   tags: always
+
+    - name: Run Security Compliance Profile!!
+      ansible.builtin.include_role:
+        name: "ansible-lockdown.windows_2019_{{ compliance_profile }}"
+        # name: "redhatofficial.rhel{{ ansible_distribution_major_version }}_{{ compliance_profile }}"
+      tags: always
+...
