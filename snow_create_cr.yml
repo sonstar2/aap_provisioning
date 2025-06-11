@@ -12,9 +12,11 @@
   roles:
     - demo.process.snow_change_request
   run_once: true
+
   post_tasks:
     - name: Store Change Record Detail
       ansible.builtin.set_fact:
          request: "{{ request }}"
          cacheable: yes
+      run_once: true
 
