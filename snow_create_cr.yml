@@ -1,5 +1,5 @@
 ---
-- name: Create a SNOW change request
+- name: Create a standard SNOW change request
   hosts: all
   gather_facts: false
   connection: local
@@ -14,6 +14,14 @@
   run_once: true
 
   post_tasks:
+
+    - name: Update to implement the change request in ServiceNow
+      servicenow.itsm.change_request:
+        state: implement
+        number: "{{ request.record.number }}"
+        assignment_group: CAB Approval
+      run_once: true
+
     - name: Store Change Record Detail
       ansible.builtin.set_fact:
          request: "{{ request }}"
