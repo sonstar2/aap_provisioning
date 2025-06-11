@@ -1,0 +1,20 @@
+---
+- name: Create a SNOW change request
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  vars:
+    servicenow_cr: create
+    cr_short_description: "Provision Change Request"
+    cr_description: "{{ change_owner | default('Ansible') }} requests {{ ansible_play_hosts_all }} in {{ change_environment | default('Dev') }} to provision"
+
+  roles:
+    - demo.process.snow_change_request
+  run_once: true
+  post_tasks:
+    - name: Store Change Record Detail
+      ansible.builtin.set_fact:
+         request: "{{ request }}"
+         cacheable: yes
+
