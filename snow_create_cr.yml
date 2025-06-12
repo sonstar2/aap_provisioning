@@ -15,12 +15,12 @@
 
   post_tasks:
 
-    - name: Update to implement the change request in ServiceNow
-      servicenow.itsm.change_request:
-        state: implement
-        number: "{{ request.record.number }}"
-        assignment_group: CAB Approval
-      run_once: true
+    # - name: Update to implement the change request in ServiceNow
+    #   servicenow.itsm.change_request:
+    #     state: implement
+    #     number: "{{ request.record.number }}"
+    #     assignment_group: CAB Approval
+    #   run_once: true
 
     - name: Store Change Record Detail
       ansible.builtin.set_fact:
