@@ -45,7 +45,7 @@
             value: "<{{ lookup('ansible.builtin.env', 'SN_HOST') }}/nav_to.do?uri=change_request.do?sysparm_query=number={{request.record.number }}>"
             short: true
           - title: Details
-            value: "{{ lightspeed_playbook_raw | to_nice_yaml(sort_keys=False) }}"
+            value: "{{ lightspeed_playbook| to_nice_yaml(sort_keys=False) }}"
             short: true
   delegate_to: localhost
   when: (lightspeed_playbook | default('') | length) > 0
