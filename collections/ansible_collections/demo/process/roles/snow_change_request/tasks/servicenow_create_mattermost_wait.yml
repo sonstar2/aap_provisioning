@@ -31,6 +31,10 @@
 - name: Set systemd facts
   ansible.builtin.set_fact:
     linux_service: "{{ input_linux_service | default('httpd') }}"
+    matter_most_format: |-
+      ``` yaml
+      "{{ lightspeed_playbook }}"
+      ```
 
 - name: Send error notification message via Mattermost
   community.general.mattermost:
@@ -44,8 +48,9 @@
           - title: Please Review the Change Record
             value: "<{{ lookup('ansible.builtin.env', 'SN_HOST') }}/nav_to.do?uri=change_request.do?sysparm_query=number={{request.record.number }}>"
             short: true
-          - title: Details
-            value: "{{ lightspeed_playbook| to_nice_yaml(sort_keys=False) }}"
+          - title: Ansible Playbook
+            value: "{{ matter_most_format }}"
+            # value: "{{ lightspeed_playbook| to_nice_yaml(sort_keys=False) }}"
             short: true
   delegate_to: localhost
   when: (lightspeed_playbook | default('') | length) > 0
