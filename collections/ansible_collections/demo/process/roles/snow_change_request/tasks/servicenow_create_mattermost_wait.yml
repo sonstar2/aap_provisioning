@@ -33,7 +33,7 @@
     linux_service: "{{ input_linux_service | default('httpd') }}"
     matter_most_format: |-
       ``` yaml
-      "{{ lightspeed_playbook }}"
+      {{ lightspeed_playbook }}
       ```
 
 - name: Send error notification message via Mattermost
@@ -50,7 +50,6 @@
             short: true
           - title: Ansible Playbook
             value: "{{ matter_most_format }}"
-            # value: "{{ lightspeed_playbook| to_nice_yaml(sort_keys=False) }}"
             short: true
   delegate_to: localhost
   when: (lightspeed_playbook | default('') | length) > 0
