@@ -1,0 +1,18 @@
+---
+- name: Create a change request
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  vars:
+    servicenow_cr: CR_Slack_MM_Wait
+    cr_short_description: "Code Review Change Request"
+    cr_description: |-
+      "{{ change_owner | default('Ansible') }} requests to review the Remediation Playbook"
+      "https://bastion.8ngbs.sandbox5571.opentlc.com:488/lab-user/lightspeed_playbooks/src/branch/main/lightspeed-response.yml"
+
+  roles:
+    - demo.process.snow_change_request
+  run_once: true
+
+

@@ -14,6 +14,11 @@
   when:
     - servicenow_cr == "CR_Slack_Wait"
 
+- name: Create CR_Mattermost_Wait
+  ansible.builtin.include_tasks: servicenow_create_mattermost_wait.yml
+  when:
+    - servicenow_cr == "CR_Slack_MM_Wait"
+
 - name: Implement CR
   ansible.builtin.include_tasks: servicenow_implement.yml
   when:
