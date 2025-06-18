@@ -8,7 +8,7 @@
   - name: Set Network detail
     set_fact:
       network_detail:
-        - name: 'segment-sandbox-gqvwr'
+        - name: "{{ network_segment_name }}"
           type: 'dhcp'
       # datacenter_name: 'SDDC-Datacenter'
       # cluster_name: 'Cluster-1'
