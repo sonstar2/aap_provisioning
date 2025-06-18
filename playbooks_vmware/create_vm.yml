@@ -10,6 +10,7 @@
       network_detail:
         - name: "{{ network_segment_name }}"
           type: 'dhcp'
+          connected: true
       # datacenter_name: 'SDDC-Datacenter'
       # cluster_name: 'Cluster-1'
       # win_template_name: 'windows 2019 Server Template'
