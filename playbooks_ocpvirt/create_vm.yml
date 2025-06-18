@@ -1,0 +1,16 @@
+---
+- name: Create OCPVIRT VM 
+  hosts: localhost
+  gather_facts: false
+
+  collections:
+    - redhat.openshift_virtualization
+    - kubernetes.core
+    - redhat.openshift
+
+  tasks:
+
+    - name: Create VM on OCP cluster
+      ansible.builtin.include_role:
+        name: demo.ocpvirt.vm_manage
+        tasks_from: 01-create-vm.yml
