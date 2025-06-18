@@ -1,8 +1,12 @@
 ---
 - name: Pre_Deploy - Validate Infrastructure
-  hosts: localhost
+  hosts: all
   gather_facts: false
   tasks:
+
+  - name: Print ansible_play_hosts_all
+    debug:
+      msg: "{{ ansible_play_hosts_all }}"
 
   - name: Block for VMware
     block:
