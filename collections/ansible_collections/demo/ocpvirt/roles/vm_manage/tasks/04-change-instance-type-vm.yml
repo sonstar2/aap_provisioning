@@ -2,7 +2,6 @@
 
     - name: Get  VM information
       redhat.openshift_virtualization.kubevirt_vmi_info:
-        host: "{{ v_ocp_cluster_api }}"
         name: "{{ v_vm_name }}"
         namespace: "{{ v_vm_namespace }}"
         validate_certs: 'false'
