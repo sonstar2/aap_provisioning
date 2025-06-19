@@ -9,3 +9,5 @@ collections:
   - name: ansible.windows
 
   - name: gocallag.hyperv
+
+  - name: redhat.openshift_virtualization
