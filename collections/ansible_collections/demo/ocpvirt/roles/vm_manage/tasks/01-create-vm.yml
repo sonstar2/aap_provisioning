@@ -50,7 +50,7 @@
             - cloudInitNoCloud:
                 userData: |-
                   #cloud-config
-                  user: cloud-user
+                  user: lab-user
                   password: "{{ v_vm_vnc_secret }}"
                   chpasswd: { expire: False }
               name: cloudinitdisk
