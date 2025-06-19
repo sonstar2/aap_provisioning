@@ -8,6 +8,8 @@
     - kubernetes.core
     - redhat.openshift
 
+  vars:
+    v_vm_name: "{{ create_vm_vm_name }}"
   tasks:
 
     - name: Create VM on OCP cluster
