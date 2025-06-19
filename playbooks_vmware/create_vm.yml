@@ -22,7 +22,7 @@
       validate_certs: no
       datacenter: "{{ datacenter_name }}"
       cluster: '{{ cluster_name }}'
-      name: "{{ vm_name }}"
+      name: "{{ create_vm_vm_name }}"
       template: "{{ win_template_name }}" 
       folder: "{{ folder_path }}"
       # folder: /{{ datacenter_name }}/Workloads/{{ vcenter_folder }}
@@ -38,7 +38,7 @@
       networks: "{{ network_detail }}"
       customization:
       #   # autologon: yes
-        hostname: "{{ vm_name }}"
+        hostname: "{{ create_vm_vm_name }}"
       #   # password: "{{ vm_password }}" 
       #   runonce:
       #   - powershell.exe -ExecutionPolicy Unrestricted -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert -EnableCredSSP
