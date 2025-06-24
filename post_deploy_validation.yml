@@ -1,5 +1,6 @@
 ---
 - name: Post_Deploy Validation
+  hosts: "{{ create_vm_vm_name | default(omit) }}"
   gather_facts: false
   tasks:
     - name: Wait for SSH connection to become available
