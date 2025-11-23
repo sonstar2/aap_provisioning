@@ -1,5 +1,5 @@
 ---
 gateway_organizations:
-  - name: "ACC"
+  - name: "{{ customer_org_name }}"
     description: !unsafe ''
 

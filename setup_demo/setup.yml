@@ -4,6 +4,20 @@
   connection: local
   gather_facts: false
 
+  vars:
+    aap_username: "{{ vault_aap_username | default(lookup('env', 'CONTROLLER_USERNAME')) }}"
+    aap_password: "{{ vault_aap_password | default(lookup('env', 'CONTROLLER_PASSWORD')) }}"
+    aap_hostname: "{{ vault_aap_hostname | default(lookup('env', 'CONTROLLER_HOST')) }}"
+    snow_hostname: "{{ vault_snow_hostname | default(lookup('env', 'SNOW_HOST')) }}"
+    snow_password: "{{ vault_snow_password | default(lookup('env', 'SNOW_PASSWORD')) }}"
+    customer_org_name: "{{ vault_customer_org_name | default(lookup('env', 'ORG_NAME')) }}"
+    aws_access_key: "{{ vault_aws_access_key | default(lookup('env', 'AWS_ACCESS_KEY')) }}"
+    aws_secret_key: "{{ vault_aws_secret_key | default(lookup('env', 'AWS_SECRET_KEY')) }}"
+    ec2_ssh_private_key: "{{ vault_ec2_ssh_private_key | default(lookup('env', 'EC2_SSH_PRIVATE_KEY')) }}"
+
+    aap_validate_certs: "{{ vault_aap_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL')) }}"
+    # Let the secrets to be defined externally (and vaulted) through well known variables
+    secrets_as_variables: true
   # vars:
   #   controller_configuration_instance_groups_enforce_defaults: true
   #   controller_configuration_credentials_secure_logging: false
@@ -14,6 +28,7 @@
         dir: "{{ controller_configs_dir | default('./configs') }}"
         ignore_files: [controller_config.yml.template]
         extensions: ["yaml"]
+        # files_matching: eda_rulebook_activations.yaml
       tags:
         - always
 

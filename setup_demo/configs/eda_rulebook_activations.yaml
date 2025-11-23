@@ -4,3 +4,11 @@ eda_rulebook_activations:
     description: ""
     project: "Remediation Incident"
     rulebook: "snow_incident_listener.yml"
+    organization: "{{ customer_org_name }}"
+    decision_environment: "DE SNOW"
+    eda_credentials:
+      - 'AAP'
+    extra_vars:
+      snow_username: admin
+      snow_password: "{{ snow_password }}"
+      snow_instance: "https://{{ snow_hostname }}"

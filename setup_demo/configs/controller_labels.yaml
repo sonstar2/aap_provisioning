@@ -1,0 +1,4 @@
+---
+controller_labels:
+  - name: "{{ customer_org_name }}"
+    organization: "{{ customer_org_name }}"

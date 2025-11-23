@@ -44,7 +44,7 @@ controller_projects:
     timeout: "0"
   - name: "DevOps"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     scm_type: "git"
     scm_url: "https://github.com/sonstar2/ansible_devops_demo.git"
     scm_branch: ""
@@ -58,9 +58,23 @@ controller_projects:
     timeout: "0"
   - name: "AAP Provisioning"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     scm_type: "git"
     scm_url: "https://github.com/sonstar2/aap_provisioning.git"
+    scm_branch: ""
+    scm_clean: false
+    scm_delete_on_update: false
+    scm_update_on_launch: false
+    scm_update_cache_timeout: "0"
+    scm_refspec: ""
+    allow_override: false
+    update_project: false
+    timeout: "0"
+  - name: "Policy As Code"
+    description: !unsafe ''
+    organization: "{{ customer_org_name }}"
+    scm_type: "git"
+    scm_url: "https://github.com/sonstar2/aap_policy_as_code.git"
     scm_branch: ""
     scm_clean: false
     scm_delete_on_update: false

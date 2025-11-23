@@ -1,8 +1,8 @@
 ---
 controller_inventory_sources:
   - name: "now"
-    description: !unsafe ''
-    organization: "ACC"
+    description: ''
+    organization: "{{ customer_org_name }}"
     source: "scm"
     limit: ""
     source_project: "DevOps"
@@ -11,4 +11,5 @@ controller_inventory_sources:
     update_on_launch: "False"
     overwrite: "True"
     credential: "SNOW"
-
+    source_vars: "{}"
+    host_filter: "{{ customer_org_name | lower }}-"

@@ -295,7 +295,7 @@ controller_templates:
 
   - name: "Get Incident Detail"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "DevOps"
     inventory: "SNOW"
     playbook: "demo_snow/playbooks/1-get-incident-detail.yml"
@@ -341,7 +341,7 @@ controller_templates:
 
   - name: "Remediate Incident"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "DevOps"
     inventory: "SNOW"
     playbook: "demo_snow/playbooks/2-remediate-incident.yml"
@@ -353,7 +353,7 @@ controller_templates:
     job_slice_count: 1
     use_fact_cache: false
     credentials:
-      - "Demo Credential"
+      - "EC2 Machine"
       - "SNOW"
     allow_simultaneous: false
     ask_scm_branch_on_launch: false
@@ -388,7 +388,7 @@ controller_templates:
 
   - name: "Close Incident Detail"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "DevOps"
     inventory: "SNOW"
     playbook: "demo_snow/playbooks/3-close-incident.yml"
@@ -434,7 +434,7 @@ controller_templates:
 
   - name: "Create SNOW Change Record"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
     inventory: "SNOW"
     playbook: "snow_create_cr_wait.yml"
@@ -480,7 +480,7 @@ controller_templates:
 
   - name: "Close SNOW Change Record"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
     inventory: "SNOW"
     playbook: "snow_close_cr.yml"
@@ -542,7 +542,7 @@ controller_templates:
 
   - name: "Create Incident Ticket"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
     inventory: "Demo Inventory"
     playbook: "snow_create_ticket.yml"
@@ -588,7 +588,7 @@ controller_templates:
 
   - name: "Close Incident Ticket"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
     inventory: "SNOW"
     playbook: "snow_close_ticket.yml"
@@ -634,9 +634,9 @@ controller_templates:
 
   - name: "Create SNOW CI"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
-    inventory: "Demo Inventory"
+    inventory: "SNOW"
     playbook: "snow_cmdb_update.yml"
     scm_branch: ""
     forks: 0
@@ -680,7 +680,7 @@ controller_templates:
 
   - name: "Create Web Application"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
     inventory: "SNOW"
     playbook: "build_webserver.yml"
@@ -692,7 +692,7 @@ controller_templates:
     job_slice_count: 1
     use_fact_cache: false
     credentials:
-      - "Demo Credential"
+      - "EC2 Machine"
     allow_simultaneous: false
     ask_scm_branch_on_launch: false
     ask_diff_mode_on_launch: false
@@ -725,7 +725,7 @@ controller_templates:
 
   - name: "Security Harden"
     description: !unsafe ''
-    organization: "ACC"
+    organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
     inventory: "SNOW"
     playbook: "compliance-enforce.yml"
@@ -737,7 +737,7 @@ controller_templates:
     job_slice_count: 1
     use_fact_cache: false
     credentials:
-      - "Demo Credential"
+      - "EC2 Machine"
     allow_simultaneous: false
     ask_scm_branch_on_launch: false
     ask_diff_mode_on_launch: false
@@ -780,6 +780,62 @@ controller_templates:
           variable: compliance_profile
           new_question: True
           question_name: !unsafe "Compliance Profile"
+      description: ""
+    become_enabled: false
+    diff_mode: false
+    webhook_service: ""
+    prevent_instance_group_fallback: false
+
+  - name: "Deploy OPA Server"
+    description: !unsafe ''
+    organization: "{{ customer_org_name }}"
+    project: "Policy As Code"
+    inventory: "SNOW"
+    playbook: "playbooks/deploy_opa_server.yml"
+    scm_branch: ""
+    forks: 0
+    limit: ""
+    verbosity: 0
+    job_type: "run"
+    job_slice_count: 1
+    use_fact_cache: false
+    credentials:
+      - "EC2 Machine"
+    allow_simultaneous: false
+    ask_scm_branch_on_launch: false
+    ask_diff_mode_on_launch: false
+    ask_tags_on_launch: false
+    ask_skip_tags_on_launch: false
+    ask_job_type_on_launch: false
+    ask_verbosity_on_launch: false
+    ask_variables_on_launch: false
+    ask_inventory_on_launch: false
+    ask_limit_on_launch: false
+    ask_credential_on_launch: false
+    ask_execution_environment_on_launch: false
+    ask_labels_on_launch: false
+    ask_forks_on_launch: false
+    ask_job_slice_count_on_launch: false
+    ask_timeout_on_launch: false
+    ask_instance_groups_on_launch: false
+    extra_vars: ""
+    job_tags: ""
+    force_handlers: false
+    skip_tags: ""
+    start_at_task: ""
+    timeout: 0
+    host_config_key: ""
+    survey_enabled: true
+    survey_spec:
+      name: ""
+      spec:
+        - max: 1024
+          min: 0
+          type: text
+          required: True
+          variable: opa_server
+          new_question: False
+          question_name: !unsafe "Server Name or Pattern"
       description: ""
     become_enabled: false
     diff_mode: false

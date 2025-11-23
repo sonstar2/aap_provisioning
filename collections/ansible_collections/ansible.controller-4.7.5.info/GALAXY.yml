@@ -1,0 +1,43 @@
+download_url: https://console.redhat.com/api/automation-hub/v3/plugin/ansible/content/published/collections/artifacts/ansible-controller-4.7.5.tar.gz
+format_version: 1.0.0
+name: controller
+namespace: ansible
+server: https://console.redhat.com/api/automation-hub/
+signatures:
+- pubkey_fingerprint: 39B5D759361A97464C564A8FE1A4BD708A828AAD
+  pulp_created: '2025-11-12T07:47:12.316784Z'
+  signature: '-----BEGIN PGP SIGNATURE-----
+
+
+    iQIcBAABCAAGBQJpFDt1AAoJEOGkvXCKgoqtc3EQAK3z7TVPdObZ1NOdwpcouYfa
+
+    op0gOLwbZlfNbHDjOoiaghLeJQVCiD6qumlbIfP5agm7bhKmzayiBnM+IPhJGpUH
+
+    vsVbb+F+q2d4YPJhEOdxZfpAnpjWEe6zxYXZmBDup6wrTgAC7dNWw7q3O8K7lKhH
+
+    O/PHUjsf/icbQOIt5ExzpTGFMPv+vqYw8U/Hn2ResUv9SZVL/4NtWNT3N5VlEstp
+
+    NpvmM086MJFT1eEemOrwY7m0K7MkkqCVm6ZcIshCUEDEcC817PjfrC8rbjiSb6AO
+
+    msOsmnu7ycyKJyGDgTWVqILpCGmVMd9ubx0yUKws8mB+ICd+fu7gM5joiNoC+nad
+
+    JQdPSd/Tsku3yVIRQyojFnkyseexSOMzKcmY/tfUVTn7pgYIcMSAdQit6IXdEBnE
+
+    MSkQkcHe/iF2Oq1KhyhTfQYAZ3bTYk4B6Xd5n1tIa4gV45bByWUfO/grfkqB2Pg6
+
+    kcK+y36HvV5BZUQadbg4EtIN8FcZKRx5JwxXZNcSEBgfQetZd0FIrr7awQIfMcyK
+
+    zUvP2zW4F9lUpRMCLJG4FLp+vcJjtJM56+P6nNvCqfpBI8l3szcBgZMZdI7p7+ie
+
+    ISEEDalRdb3IwdnNQR9DC96/+ZTHgBmDcV2aZR9rVLThYMGAPHPIAAnLlYJ5+hsm
+
+    DcfE7DqiQmwx7SuxkYC3
+
+    =lw62
+
+    -----END PGP SIGNATURE-----
+
+    '
+  signing_service: null
+version: 4.7.5
+version_url: /api/automation-hub/v3/plugin/ansible/content/published/collections/index/ansible/controller/versions/4.7.5/
