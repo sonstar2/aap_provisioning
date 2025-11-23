@@ -1,19 +1,11 @@
 ---
-- name: Create a change request
-  hosts: all
-  gather_facts: false
-  connection: local
-  
-  tasks:
-    - name: Block with run_once
-      run_once: true
-      block:
-        - name: Create Normal Change
-          ansible.builtin.import_playbook: snow_create_cr_wait.yml
-          when:
-            - change_type == "Normal"
 
-        - name: Create Standard Change
-          ansible.builtin.import_playbook: snow_create_cr.yml
-          when:
-            - chagne_type == "Standard"
+- name: Create Normal Change
+  ansible.builtin.import_playbook: snow_create_cr_wait.yml
+  when:
+    - change_type == "Normal"
+
+- name: Create Standard Change
+  ansible.builtin.import_playbook: snow_create_cr.yml
+  when:
+    - chagne_type == "Standard"
