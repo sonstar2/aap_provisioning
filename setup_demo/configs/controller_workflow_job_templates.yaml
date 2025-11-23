@@ -233,6 +233,14 @@ controller_workflows:
           question_name: !unsafe "Email"
         - type: multiplechoice
           choices:
+            - cis
+            - e8
+            - stig          
+          required: True
+          variable: compliance_profile
+          question_name: !unsafe "Security Compliance Profile"   
+        - type: multiplechoice
+          choices:
             - Web
             - Database
             - Middleware
