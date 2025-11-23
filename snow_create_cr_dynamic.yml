@@ -5,16 +5,15 @@
   connection: local
   
   tasks:
-    block:
-    - name: Create Normal Change
-      ansible.builtin.include_tasks: snow_create_cr_wait.yml
-      when:
-        - change_type == "Normal"
+    - name: Block with run_once
+      run_once: true
+      block:
+        - name: Create Normal Change
+          ansible.builtin.import_playbook: snow_create_cr_wait.yml
+          when:
+            - change_type == "Normal"
 
-    - name: Create Standard Change
-      ansible.builtin.include_tasks: servicenow_create.yml
-      when:
-        - chagne_type == "Standard"
-    run_once: true
-
-
+        - name: Create Standard Change
+          ansible.builtin.import_playbook: snow_create_cr.yml
+          when:
+            - chagne_type == "Standard"
