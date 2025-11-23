@@ -8,4 +8,4 @@
 - name: Create Standard Change
   ansible.builtin.import_playbook: snow_create_cr.yml
   when:
-    - chagne_type == "Standard"
+    - change_type == "Standard"
