@@ -28,7 +28,7 @@
         dir: "{{ controller_configs_dir | default('./configs') }}"
         ignore_files: [controller_config.yml.template]
         extensions: ["yaml"]
-        # files_matching: eda_rulebook_activations.yaml
+        files_matching: controller_workflow_job_templates.yaml
       tags:
         - always
 

@@ -247,5 +247,13 @@ controller_workflows:
           required: True
           variable: app_name
           question_name: !unsafe "Application"
+        - type: multiplechoice
+          choices:
+            - Normal
+            - Standard
+          default: "Standard"
+          required: True
+          variable: change_type
+          question_name: !unsafe "Change Type"
       description: ""
 

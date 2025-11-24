@@ -437,7 +437,7 @@ controller_templates:
     organization: "{{ customer_org_name }}"
     project: "AAP Provisioning"
     inventory: "SNOW"
-    playbook: "snow_create_cr_wait.yml"
+    playbook: "snow_create_cr_dynamic.yml"
     scm_branch: ""
     forks: 0
     limit: ""
