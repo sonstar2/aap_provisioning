@@ -12,3 +12,4 @@ eda_rulebook_activations:
       snow_username: admin
       snow_password: "{{ snow_password }}"
       snow_instance: "https://{{ snow_hostname }}"
+      workflow_name: "Auto Healing SNOW Incident Ticket"
