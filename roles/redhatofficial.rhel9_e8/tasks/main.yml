@@ -1,200 +1,7 @@
-- name: 'Set fact: Package manager reinstall command (dnf)'
-  set_fact:
-    package_manager_reinstall_cmd: dnf reinstall -y
-  when:
-  - high_complexity | bool
-  - high_severity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - rpm_verify_hashes | bool
-  - ansible_distribution == "Fedora"
-  tags:
-  - CCE-90841-8
-  - CJIS-5.10.4.1
-  - NIST-800-171-3.3.8
-  - NIST-800-171-3.4.1
-  - NIST-800-53-AU-9(3)
-  - NIST-800-53-CM-6(c)
-  - NIST-800-53-CM-6(d)
-  - NIST-800-53-SI-7
-  - NIST-800-53-SI-7(1)
-  - NIST-800-53-SI-7(6)
-  - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
-  - high_complexity
-  - high_severity
-  - medium_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - rpm_verify_hashes
-
-- name: 'Set fact: Package manager reinstall command (yum)'
-  set_fact:
-    package_manager_reinstall_cmd: yum reinstall -y
-  when:
-  - high_complexity | bool
-  - high_severity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - rpm_verify_hashes | bool
-  - (ansible_distribution == "RedHat" or ansible_distribution == "CentOS" or ansible_distribution == "OracleLinux")
-  tags:
-  - CCE-90841-8
-  - CJIS-5.10.4.1
-  - NIST-800-171-3.3.8
-  - NIST-800-171-3.4.1
-  - NIST-800-53-AU-9(3)
-  - NIST-800-53-CM-6(c)
-  - NIST-800-53-CM-6(d)
-  - NIST-800-53-SI-7
-  - NIST-800-53-SI-7(1)
-  - NIST-800-53-SI-7(6)
-  - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
-  - high_complexity
-  - high_severity
-  - medium_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - rpm_verify_hashes
-
-- name: 'Set fact: Package manager reinstall command (zypper)'
-  set_fact:
-    package_manager_reinstall_cmd: zypper in -f -y
-  when:
-  - high_complexity | bool
-  - high_severity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - rpm_verify_hashes | bool
-  - ansible_distribution == "SLES"
-  tags:
-  - CCE-90841-8
-  - CJIS-5.10.4.1
-  - NIST-800-171-3.3.8
-  - NIST-800-171-3.4.1
-  - NIST-800-53-AU-9(3)
-  - NIST-800-53-CM-6(c)
-  - NIST-800-53-CM-6(d)
-  - NIST-800-53-SI-7
-  - NIST-800-53-SI-7(1)
-  - NIST-800-53-SI-7(6)
-  - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
-  - high_complexity
-  - high_severity
-  - medium_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - rpm_verify_hashes
-
-- name: Read files with incorrect hash
-  command: rpm -Va --nodeps --nosize --nomtime --nordev --nocaps --nolinkto --nouser --nogroup --nomode --noghost --noconfig
-  register: files_with_incorrect_hash
-  changed_when: false
-  failed_when: files_with_incorrect_hash.rc > 1
-  check_mode: false
-  when:
-  - high_complexity | bool
-  - high_severity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - rpm_verify_hashes | bool
-  - (package_manager_reinstall_cmd is defined)
-  tags:
-  - CCE-90841-8
-  - CJIS-5.10.4.1
-  - NIST-800-171-3.3.8
-  - NIST-800-171-3.4.1
-  - NIST-800-53-AU-9(3)
-  - NIST-800-53-CM-6(c)
-  - NIST-800-53-CM-6(d)
-  - NIST-800-53-SI-7
-  - NIST-800-53-SI-7(1)
-  - NIST-800-53-SI-7(6)
-  - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
-  - high_complexity
-  - high_severity
-  - medium_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - rpm_verify_hashes
-
-- name: Create list of packages
-  command: rpm -qf "{{ item }}"
-  with_items: '{{ files_with_incorrect_hash.stdout_lines | map(''regex_findall'', ''^[.]+[5]+.* (\/.*)'', ''\1'') | map(''join'')
-    | select(''match'', ''(\/.*)'') | list | unique }}'
-  register: list_of_packages
-  changed_when: false
-  check_mode: false
-  when:
-  - high_complexity | bool
-  - high_severity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - rpm_verify_hashes | bool
-  - files_with_incorrect_hash.stdout_lines is defined
-  - (files_with_incorrect_hash.stdout_lines | length > 0)
-  tags:
-  - CCE-90841-8
-  - CJIS-5.10.4.1
-  - NIST-800-171-3.3.8
-  - NIST-800-171-3.4.1
-  - NIST-800-53-AU-9(3)
-  - NIST-800-53-CM-6(c)
-  - NIST-800-53-CM-6(d)
-  - NIST-800-53-SI-7
-  - NIST-800-53-SI-7(1)
-  - NIST-800-53-SI-7(6)
-  - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
-  - high_complexity
-  - high_severity
-  - medium_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - rpm_verify_hashes
-
-- name: Reinstall packages of files with incorrect hash
-  command: '{{ package_manager_reinstall_cmd }} ''{{ item }}'''
-  with_items: '{{ list_of_packages.results | map(attribute=''stdout_lines'') | list | unique }}'
-  when:
-  - high_complexity | bool
-  - high_severity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - rpm_verify_hashes | bool
-  - files_with_incorrect_hash.stdout_lines is defined
-  - (package_manager_reinstall_cmd is defined and (files_with_incorrect_hash.stdout_lines | length > 0))
-  tags:
-  - CCE-90841-8
-  - CJIS-5.10.4.1
-  - NIST-800-171-3.3.8
-  - NIST-800-171-3.4.1
-  - NIST-800-53-AU-9(3)
-  - NIST-800-53-CM-6(c)
-  - NIST-800-53-CM-6(d)
-  - NIST-800-53-SI-7
-  - NIST-800-53-SI-7(1)
-  - NIST-800-53-SI-7(6)
-  - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
-  - high_complexity
-  - high_severity
-  - medium_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - rpm_verify_hashes
-
 - name: Read list of files with incorrect ownership
   command: rpm -Va --nodeps --nosignature --nofiledigest --nosize --nomtime --nordev --nocaps --nolinkto --nomode
+  args:
+    warn: false
   register: files_with_incorrect_ownership
   failed_when: files_with_incorrect_ownership.rc > 1
   changed_when: false
@@ -211,7 +18,6 @@
   - NIST-800-53-SI-7(1)
   - NIST-800-53-SI-7(6)
   - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
   - high_complexity
   - high_severity
   - medium_disruption
@@ -228,6 +34,8 @@
 
 - name: Create list of packages
   command: rpm -qf "{{ item }}"
+  args:
+    warn: false
   with_items: '{{ files_with_incorrect_ownership.stdout_lines | map(''regex_findall'', ''^[.]+[U|G]+.* (\/.*)'', ''\1'') |
     map(''join'') | select(''match'', ''(\/.*)'') | list | unique }}'
   register: list_of_packages
@@ -253,7 +61,6 @@
   - NIST-800-53-SI-7(1)
   - NIST-800-53-SI-7(6)
   - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
   - high_complexity
   - high_severity
   - medium_disruption
@@ -262,7 +69,9 @@
   - rpm_verify_ownership
 
 - name: Correct file ownership with RPM
-  command: rpm --setugids '{{ item }}'
+  command: rpm --quiet --setugids '{{ item }}'
+  args:
+    warn: false
   with_items: '{{ list_of_packages.results | map(attribute=''stdout_lines'') | list | unique }}'
   when:
   - high_complexity | bool
@@ -284,7 +93,6 @@
   - NIST-800-53-SI-7(1)
   - NIST-800-53-SI-7(6)
   - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
   - high_complexity
   - high_severity
   - medium_disruption
@@ -294,6 +102,8 @@
 
 - name: Read list of files with incorrect permissions
   command: rpm -Va --nodeps --nosignature --nofiledigest --nosize --nomtime --nordev --nocaps --nolinkto --nouser --nogroup
+  args:
+    warn: false
   register: files_with_incorrect_permissions
   failed_when: files_with_incorrect_permissions.rc > 1
   changed_when: false
@@ -311,7 +121,6 @@
   - NIST-800-53-SI-7(1)
   - NIST-800-53-SI-7(6)
   - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
   - high_complexity
   - high_severity
   - medium_disruption
@@ -328,6 +137,8 @@
 
 - name: Create list of packages
   command: rpm -qf "{{ item }}"
+  args:
+    warn: false
   with_items: '{{ files_with_incorrect_permissions.stdout_lines | map(''regex_findall'', ''^[.]+[M]+.* (\/.*)'', ''\1'') |
     map(''join'') | select(''match'', ''(\/.*)'') | list | unique }}'
   register: list_of_packages
@@ -354,7 +165,6 @@
   - NIST-800-53-SI-7(1)
   - NIST-800-53-SI-7(6)
   - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
   - high_complexity
   - high_severity
   - medium_disruption
@@ -364,6 +174,8 @@
 
 - name: Correct file permissions with RPM
   command: rpm --setperms '{{ item }}'
+  args:
+    warn: false
   with_items: '{{ list_of_packages.results | map(attribute=''stdout_lines'') | list | unique }}'
   when:
   - high_complexity | bool
@@ -386,7 +198,6 @@
   - NIST-800-53-SI-7(1)
   - NIST-800-53-SI-7(6)
   - PCI-DSS-Req-11.5
-  - PCI-DSSv4-11.5.2
   - high_complexity
   - high_severity
   - medium_disruption
@@ -460,8 +271,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-MA-4(6)
   - NIST-800-53-SC-13
-  - PCI-DSS-Req-2.2
-  - PCI-DSSv4-2.2
   - configure_ssh_crypto_policy
   - disable_strategy
   - low_complexity
@@ -687,10 +496,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_rear_installed | bool
-  - not ( ( ( ansible_architecture == "aarch64" and ansible_distribution == 'OracleLinux' and ansible_distribution_version
-    is version('9.0', '>=') ) or ( ansible_architecture == "aarch64" and ansible_distribution == 'RedHat' and ansible_distribution_version
-    is version('9.0', '>=') ) or ( ansible_distribution == 'RedHat' and ansible_distribution_version is version('8.4', '<=')
-    and ansible_architecture == "s390x" ) ) )
+  - ansible_architecture != "aarch64"
   tags:
   - CCE-83503-3
   - enable_strategy
@@ -717,7 +523,6 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
-  - PCI-DSSv4-6.3.3
   - configure_strategy
   - ensure_gpgcheck_globally_activated
   - high_severity
@@ -762,7 +567,6 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
-  - PCI-DSSv4-6.3.3
   - configure_strategy
   - ensure_gpgcheck_globally_activated
   - high_severity
@@ -846,7 +650,7 @@
 
     '
   register: repo_grep_results
-  failed_when: repo_grep_results.rc not in [0, 1]
+  ignore_errors: true
   changed_when: false
   tags:
   - CCE-83464-8
@@ -862,7 +666,6 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
-  - PCI-DSSv4-6.3.3
   - enable_strategy
   - ensure_gpgcheck_never_disabled
   - high_severity
@@ -899,7 +702,6 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
-  - PCI-DSSv4-6.3.3
   - enable_strategy
   - ensure_gpgcheck_never_disabled
   - high_severity
@@ -945,6 +747,8 @@
 
 - name: Read signatures in GPG key
   command: gpg --show-keys --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
+  args:
+    warn: false
   changed_when: false
   register: gpg_fingerprints
   check_mode: false
@@ -1071,7 +875,6 @@
   - NIST-800-53-SI-2(5)
   - NIST-800-53-SI-2(c)
   - PCI-DSS-Req-6.2
-  - PCI-DSSv4-6.3.3
   - high_disruption
   - low_complexity
   - medium_severity
@@ -1088,11 +891,11 @@
   - security_patches_up_to_date | bool
   - skip_ansible_lint | bool
 
-- name: Enable authselect - Select authselect profile
+- name: Select authselect profile
   ansible.builtin.command:
     cmd: authselect select "{{ var_authselect_profile }}"
+  ignore_errors: true
   register: result_authselect_select
-  failed_when: false
   tags:
   - CCE-89732-2
   - NIST-800-53-AC-3
@@ -1110,11 +913,13 @@
   - medium_severity | bool
   - no_reboot_needed | bool
 
-- name: Enable authselect - Verify if PAM has been altered
+- name: Verify if PAM has been altered
   ansible.builtin.command:
     cmd: rpm -qV pam
   register: result_altered_authselect
-  failed_when: false
+  ignore_errors: true
+  args:
+    warn: false
   when:
   - configure_strategy | bool
   - enable_authselect | bool
@@ -1122,7 +927,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - result_authselect_select.rc != 0
+  - result_authselect_select is failed
   tags:
   - CCE-89732-2
   - NIST-800-53-AC-3
@@ -1133,10 +938,10 @@
   - medium_severity
   - no_reboot_needed
 
-- name: Enable authselect - Informative message based on the authselect integrity check
+- name: Informative message based on the authselect integrity check
   ansible.builtin.assert:
     that:
-    - result_altered_authselect is skipped or result_altered_authselect.rc == 0
+    - result_altered_authselect is success
     fail_msg:
     - Files in the 'pam' package have been altered, so the authselect configuration won't be forced.
   tags:
@@ -1156,7 +961,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
 
-- name: Enable authselect - Force authselect profile select
+- name: Force authselect profile select
   ansible.builtin.command:
     cmd: authselect select --force "{{ var_authselect_profile }}"
   when:
@@ -1166,8 +971,8 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - result_authselect_select.rc != 0
-  - result_altered_authselect is skipped or result_altered_authselect.rc == 0
+  - result_altered_authselect is success
+  - result_authselect_select is failed
   tags:
   - CCE-89732-2
   - NIST-800-53-AC-3
@@ -1199,8 +1004,6 @@
   - NIST-800-53-IA-5(1)(a)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
-  - PCI-DSSv4-8.3.6
-  - PCI-DSSv4-8.3.9
   - configure_strategy
   - high_severity
   - low_complexity
@@ -1215,11 +1018,11 @@
       cmd: authselect check
     register: result_authselect_check_cmd
     changed_when: false
-    failed_when: false
+    ignore_errors: true
   - name: Prevent Login to Accounts With Empty Password - Informative message based on the authselect integrity check result
     ansible.builtin.assert:
       that:
-      - result_authselect_check_cmd.rc == 0
+      - result_authselect_check_cmd is success
       fail_msg:
       - authselect integrity check failed. Remediation aborted!
       - This remediation could not be applied because an authselect profile was not selected or the selected profile is not
@@ -1266,8 +1069,6 @@
   - NIST-800-53-IA-5(1)(a)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
-  - PCI-DSSv4-8.3.6
-  - PCI-DSSv4-8.3.9
   - configure_strategy
   - high_severity
   - low_complexity
@@ -1300,8 +1101,6 @@
   - NIST-800-53-IA-5(1)(a)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
-  - PCI-DSSv4-8.3.6
-  - PCI-DSSv4-8.3.9
   - configure_strategy
   - high_severity
   - low_complexity
@@ -1328,7 +1127,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SI-4(23)
   - PCI-DSS-Req-10.1
-  - PCI-DSSv4-10.2.1
   - enable_strategy
   - low_complexity
   - low_disruption
@@ -1349,7 +1147,7 @@
     package_facts:
       manager: auto
   - name: Enable service auditd
-    systemd:
+    service:
       name: auditd
       enabled: 'yes'
       state: started
@@ -1381,7 +1179,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SI-4(23)
   - PCI-DSS-Req-10.1
-  - PCI-DSSv4-10.2.1
   - enable_strategy
   - low_complexity
   - low_disruption
@@ -1401,7 +1198,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1418,7 +1214,7 @@
 
 - name: Set architecture for audit tasks
   set_fact:
-    audit_arch: b64
+    audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
   when:
   - audit_rules_networkconfig_modification | bool
   - low_complexity | bool
@@ -1428,8 +1224,6 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
-    == "s390x" or ansible_architecture == "x86_64"
   tags:
   - CCE-83706-2
   - CJIS-5.4.1.1
@@ -1439,7 +1233,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1447,7 +1240,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remediate audit rules for network configuration for 32bit platform
+- name: Remediate audit rules for network configuration for x86
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -1560,7 +1353,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1568,7 +1360,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remediate audit rules for network configuration for 64bit platform
+- name: Remediate audit rules for network configuration for x86_64
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -1682,7 +1474,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1714,7 +1505,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1747,7 +1537,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1779,7 +1568,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1811,7 +1599,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1844,7 +1631,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1876,7 +1662,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1910,7 +1695,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1942,7 +1726,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -1975,7 +1758,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2007,7 +1789,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2039,7 +1820,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2072,7 +1852,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2104,7 +1883,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2138,7 +1916,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2170,7 +1947,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2203,7 +1979,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2235,7 +2010,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2267,7 +2041,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2300,7 +2073,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2332,7 +2104,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2366,7 +2137,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2398,7 +2168,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2431,7 +2200,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2463,7 +2231,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2495,7 +2262,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2528,7 +2294,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2560,7 +2325,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2594,7 +2358,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_networkconfig_modification
   - low_complexity
   - low_disruption
@@ -2616,8 +2379,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2658,8 +2419,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2694,8 +2453,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2729,8 +2486,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2764,8 +2519,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2800,8 +2553,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2835,8 +2586,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2872,8 +2621,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2907,8 +2654,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2943,8 +2688,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -2978,8 +2721,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -3013,8 +2754,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -3049,8 +2788,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -3084,8 +2821,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -3121,8 +2856,6 @@
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.2
   - PCI-DSS-Req-10.2.5.b
-  - PCI-DSSv4-10.2.1.5
-  - PCI-DSSv4-10.2.2
   - audit_rules_sysadmin_actions
   - low_complexity
   - low_disruption
@@ -3141,7 +2874,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chmod
   - low_complexity
   - low_disruption
@@ -3158,7 +2890,7 @@
 
 - name: Set architecture for audit chmod tasks
   set_fact:
-    audit_arch: b64
+    audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
   when:
   - audit_rules_dac_modification_chmod | bool
   - low_complexity | bool
@@ -3168,8 +2900,6 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
-    == "s390x" or ansible_architecture == "x86_64"
   tags:
   - CCE-83830-0
   - CJIS-5.4.1.1
@@ -3178,7 +2908,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chmod
   - low_complexity
   - low_disruption
@@ -3186,7 +2915,7 @@
   - reboot_required
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for chmod for 32bit platform
+- name: Perform remediation of Audit rules for chmod for x86 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -3298,7 +3027,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chmod
   - low_complexity
   - low_disruption
@@ -3306,7 +3034,7 @@
   - reboot_required
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for chmod for 64bit platform
+- name: Perform remediation of Audit rules for chmod for x86_64 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -3419,7 +3147,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chmod
   - low_complexity
   - low_disruption
@@ -3438,7 +3165,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chown
   - low_complexity
   - low_disruption
@@ -3455,7 +3181,7 @@
 
 - name: Set architecture for audit chown tasks
   set_fact:
-    audit_arch: b64
+    audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
   when:
   - audit_rules_dac_modification_chown | bool
   - low_complexity | bool
@@ -3465,8 +3191,6 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
-    == "s390x" or ansible_architecture == "x86_64"
   tags:
   - CCE-83812-8
   - CJIS-5.4.1.1
@@ -3475,7 +3199,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chown
   - low_complexity
   - low_disruption
@@ -3483,7 +3206,7 @@
   - reboot_required
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for chown for 32bit platform
+- name: Perform remediation of Audit rules for chown for x86 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -3597,7 +3320,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chown
   - low_complexity
   - low_disruption
@@ -3605,7 +3327,7 @@
   - reboot_required
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for chown for 64bit platform
+- name: Perform remediation of Audit rules for chown for x86_64 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -3720,7 +3442,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.5.5
-  - PCI-DSSv4-10.3.4
   - audit_rules_dac_modification_chown
   - low_complexity
   - low_disruption
@@ -4564,7 +4285,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.7
-  - PCI-DSSv4-10.2.1.7
   - audit_rules_kernel_module_loading
   - low_complexity
   - low_disruption
@@ -4581,7 +4301,7 @@
 
 - name: Set architecture for audit tasks
   set_fact:
-    audit_arch: b64
+    audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
   when:
   - audit_rules_kernel_module_loading | bool
   - low_complexity | bool
@@ -4591,8 +4311,6 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
-    == "s390x" or ansible_architecture == "x86_64"
   tags:
   - CCE-83804-5
   - CJIS-5.4.1.1
@@ -4602,7 +4320,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.7
-  - PCI-DSSv4-10.2.1.7
   - audit_rules_kernel_module_loading
   - low_complexity
   - low_disruption
@@ -4610,7 +4327,7 @@
   - reboot_required
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for kernel module loading for 32bit platform
+- name: Perform remediation of Audit rules for kernel module loading for x86 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -4727,7 +4444,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.7
-  - PCI-DSSv4-10.2.1.7
   - audit_rules_kernel_module_loading
   - low_complexity
   - low_disruption
@@ -4735,7 +4451,7 @@
   - reboot_required
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for kernel module loading for 64bit platform
+- name: Perform remediation of Audit rules for kernel module loading for x86_64 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -4853,7 +4569,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.7
-  - PCI-DSSv4-10.2.1.7
   - audit_rules_kernel_module_loading
   - low_complexity
   - low_disruption
@@ -4872,7 +4587,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -4910,7 +4624,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -4942,7 +4655,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -4973,7 +4685,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -5004,7 +4715,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -5036,7 +4746,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -5067,7 +4776,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -5100,7 +4808,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_faillock
   - low_complexity
   - low_disruption
@@ -5119,7 +4826,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5157,7 +4863,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5189,7 +4894,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5220,7 +4924,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5251,7 +4954,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5283,7 +4985,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5314,7 +5015,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5347,7 +5047,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_lastlog
   - low_complexity
   - low_disruption
@@ -5366,7 +5065,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5404,7 +5102,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5436,7 +5133,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5467,7 +5163,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5498,7 +5193,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5530,7 +5224,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5561,7 +5254,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5594,7 +5286,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.2.3
-  - PCI-DSSv4-10.2.1.3
   - audit_rules_login_events_tallylog
   - low_complexity
   - low_disruption
@@ -5614,7 +5305,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_adjtimex
   - low_complexity
   - low_disruption
@@ -5631,7 +5321,7 @@
 
 - name: Set architecture for audit tasks
   set_fact:
-    audit_arch: b64
+    audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
   when:
   - audit_rules_time_adjtimex | bool
   - low_complexity | bool
@@ -5641,8 +5331,6 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
-    == "s390x" or ansible_architecture == "x86_64"
   tags:
   - CCE-83840-9
   - CJIS-5.4.1.1
@@ -5652,7 +5340,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_adjtimex
   - low_complexity
   - low_disruption
@@ -5660,7 +5347,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for adjtimex for 32bit platform
+- name: Perform remediation of Audit rules for adjtimex for x86 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -5773,7 +5460,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_adjtimex
   - low_complexity
   - low_disruption
@@ -5781,7 +5467,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for adjtimex for 64bit platform
+- name: Perform remediation of Audit rules for adjtimex for x86_64 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -5894,7 +5580,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_adjtimex
   - low_complexity
   - low_disruption
@@ -5914,7 +5599,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_clock_settime
   - low_complexity
   - low_disruption
@@ -5931,7 +5615,7 @@
 
 - name: Set architecture for audit tasks
   set_fact:
-    audit_arch: b64
+    audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
   when:
   - audit_rules_time_clock_settime | bool
   - low_complexity | bool
@@ -5941,8 +5625,6 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
-    == "s390x" or ansible_architecture == "x86_64"
   tags:
   - CCE-83837-5
   - CJIS-5.4.1.1
@@ -5952,7 +5634,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_clock_settime
   - low_complexity
   - low_disruption
@@ -5960,7 +5641,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for clock_settime for 32bit platform
+- name: Perform remediation of Audit rules for clock_settime for x86 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -6067,7 +5748,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_clock_settime
   - low_complexity
   - low_disruption
@@ -6075,7 +5755,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for clock_settime for 64bit platform
+- name: Perform remediation of Audit rules for clock_settime for x86_64 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -6183,7 +5863,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_clock_settime
   - low_complexity
   - low_disruption
@@ -6203,7 +5882,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_settimeofday
   - low_complexity
   - low_disruption
@@ -6220,7 +5898,7 @@
 
 - name: Set architecture for audit tasks
   set_fact:
-    audit_arch: b64
+    audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
   when:
   - audit_rules_time_settimeofday | bool
   - low_complexity | bool
@@ -6230,8 +5908,6 @@
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - ansible_architecture == "aarch64" or ansible_architecture == "ppc64" or ansible_architecture == "ppc64le" or ansible_architecture
-    == "s390x" or ansible_architecture == "x86_64"
   tags:
   - CCE-83836-7
   - CJIS-5.4.1.1
@@ -6241,7 +5917,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_settimeofday
   - low_complexity
   - low_disruption
@@ -6249,7 +5924,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for settimeofday for 32bit platform
+- name: Perform remediation of Audit rules for settimeofday for x86 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -6362,7 +6037,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_settimeofday
   - low_complexity
   - low_disruption
@@ -6370,7 +6044,7 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Perform remediation of Audit rules for settimeofday for 64bit platform
+- name: Perform remediation of Audit rules for settimeofday for x86_64 platform
   block:
   - name: Declare list of syscalls
     set_fact:
@@ -6484,7 +6158,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_settimeofday
   - low_complexity
   - low_disruption
@@ -6504,7 +6177,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_stime
   - low_complexity
   - low_disruption
@@ -6632,7 +6304,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_stime
   - low_complexity
   - low_disruption
@@ -6652,8 +6323,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -6692,8 +6361,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -6726,8 +6393,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -6759,8 +6424,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -6792,8 +6455,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -6826,8 +6487,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -6859,8 +6518,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -6894,8 +6551,6 @@
   - NIST-800-53-AU-2(d)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.4.2.b
-  - PCI-DSSv4-10.6.3
-  - PCI-DSSv4-10.6.3
   - audit_rules_time_watch_localtime
   - low_complexity
   - low_disruption
@@ -7091,14 +6746,14 @@
   - auditd_log_format
   - low_complexity
   - low_disruption
-  - low_severity
+  - medium_severity
   - no_reboot_needed
   - restrict_strategy
   when:
   - auditd_log_format | bool
   - low_complexity | bool
   - low_disruption | bool
-  - low_severity | bool
+  - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
@@ -7131,7 +6786,7 @@
   - auditd_log_format | bool
   - low_complexity | bool
   - low_disruption | bool
-  - low_severity | bool
+  - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
@@ -7143,7 +6798,7 @@
   - auditd_log_format
   - low_complexity
   - low_disruption
-  - low_severity
+  - medium_severity
   - no_reboot_needed
   - restrict_strategy
 
@@ -7305,7 +6960,7 @@
     package_facts:
       manager: auto
   - name: Enable service rsyslog
-    systemd:
+    service:
       name: rsyslog
       enabled: 'yes'
       state: started
@@ -7359,7 +7014,7 @@
     package_facts:
       manager: auto
   - name: Enable service firewalld
-    systemd:
+    service:
       name: firewalld
       enabled: 'yes'
       state: started
@@ -7416,7 +7071,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Ensure sticky bit is set
+- name: ensure sticky bit is set
   file:
     path: '{{ item }}'
     mode: a+t
@@ -7705,8 +7360,7 @@
   - no_reboot_needed | bool
 
 - name: Read list of world and group writable system executables
-  ansible.builtin.command: find /bin /usr/bin /usr/local/bin /sbin /usr/sbin /usr/local/sbin /usr/libexec -perm /022 -type
-    f
+  command: find /bin /usr/bin /usr/local/bin /sbin /usr/sbin /usr/local/sbin /usr/libexec -perm /022 -type f
   register: world_writable_library_files
   changed_when: false
   failed_when: false
@@ -7732,10 +7386,9 @@
   - restrict_strategy | bool
 
 - name: Remove world/group writability of system executables
-  ansible.builtin.file:
+  file:
     path: '{{ item }}'
     mode: go-w
-    state: file
   with_items: '{{ world_writable_library_files.stdout_lines }}'
   when:
   - file_permissions_binary_dirs | bool
@@ -7759,7 +7412,7 @@
   - restrict_strategy
 
 - name: Find /lib/ file(s) recursively
-  command: find -H /lib/  -perm /g+w,o+w  -type f -regex "^.*$"
+  command: find -H /lib/  -perm /g+w,o+w -type f -regex "^.*$"
   register: files_found
   changed_when: false
   failed_when: false
@@ -7812,7 +7465,7 @@
   - no_reboot_needed | bool
 
 - name: Find /lib64/ file(s) recursively
-  command: find -H /lib64/  -perm /g+w,o+w  -type f -regex "^.*$"
+  command: find -H /lib64/  -perm /g+w,o+w -type f -regex "^.*$"
   register: files_found
   changed_when: false
   failed_when: false
@@ -7865,7 +7518,7 @@
   - no_reboot_needed | bool
 
 - name: Find /usr/lib/ file(s) recursively
-  command: find -H /usr/lib/  -perm /g+w,o+w  -type f -regex "^.*$"
+  command: find -H /usr/lib/  -perm /g+w,o+w -type f -regex "^.*$"
   register: files_found
   changed_when: false
   failed_when: false
@@ -7918,7 +7571,7 @@
   - no_reboot_needed | bool
 
 - name: Find /usr/lib64/ file(s) recursively
-  command: find -H /usr/lib64/  -perm /g+w,o+w  -type f -regex "^.*$"
+  command: find -H /usr/lib64/  -perm /g+w,o+w -type f -regex "^.*$"
   register: files_found
   changed_when: false
   failed_when: false
@@ -8437,7 +8090,6 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.dmesg_restrict.*$
     patterns: '*.conf'
     file_type: any
@@ -8462,7 +8114,7 @@
   - reboot_required
   - sysctl_kernel_dmesg_restrict
 
-- name: Comment out any occurrences of kernel.dmesg_restrict from config files
+- name: Comment out any occurrences of kernel.dmesg_restrict from /etc/sysctl.d/*.conf files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.dmesg_restrict
@@ -8492,7 +8144,6 @@
   sysctl:
     name: kernel.dmesg_restrict
     value: '1'
-    sysctl_file: /etc/sysctl.conf
     state: present
     reload: true
   when:
@@ -8520,7 +8171,6 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.kexec_load_disabled.*$
     patterns: '*.conf'
     file_type: any
@@ -8543,7 +8193,7 @@
   - reboot_required
   - sysctl_kernel_kexec_load_disabled
 
-- name: Comment out any occurrences of kernel.kexec_load_disabled from config files
+- name: Comment out any occurrences of kernel.kexec_load_disabled from /etc/sysctl.d/*.conf files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.kexec_load_disabled
@@ -8571,7 +8221,6 @@
   sysctl:
     name: kernel.kexec_load_disabled
     value: '1'
-    sysctl_file: /etc/sysctl.conf
     state: present
     reload: true
   when:
@@ -8597,7 +8246,6 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.unprivileged_bpf_disabled.*$
     patterns: '*.conf'
     file_type: any
@@ -8621,7 +8269,7 @@
   - reboot_required
   - sysctl_kernel_unprivileged_bpf_disabled
 
-- name: Comment out any occurrences of kernel.unprivileged_bpf_disabled from config files
+- name: Comment out any occurrences of kernel.unprivileged_bpf_disabled from /etc/sysctl.d/*.conf files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.unprivileged_bpf_disabled
@@ -8650,7 +8298,6 @@
   sysctl:
     name: kernel.unprivileged_bpf_disabled
     value: '1'
-    sysctl_file: /etc/sysctl.conf
     state: present
     reload: true
   when:
@@ -8677,7 +8324,6 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.yama.ptrace_scope.*$
     patterns: '*.conf'
     file_type: any
@@ -8700,7 +8346,7 @@
   - reboot_required
   - sysctl_kernel_yama_ptrace_scope
 
-- name: Comment out any occurrences of kernel.yama.ptrace_scope from config files
+- name: Comment out any occurrences of kernel.yama.ptrace_scope from /etc/sysctl.d/*.conf files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.yama.ptrace_scope
@@ -8728,7 +8374,6 @@
   sysctl:
     name: kernel.yama.ptrace_scope
     value: '1'
-    sysctl_file: /etc/sysctl.conf
     state: present
     reload: true
   when:
@@ -8754,7 +8399,6 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*net.core.bpf_jit_harden.*$
     patterns: '*.conf'
     file_type: any
@@ -8778,7 +8422,7 @@
   - reboot_required
   - sysctl_net_core_bpf_jit_harden
 
-- name: Comment out any occurrences of net.core.bpf_jit_harden from config files
+- name: Comment out any occurrences of net.core.bpf_jit_harden from /etc/sysctl.d/*.conf files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*net.core.bpf_jit_harden
@@ -8807,7 +8451,6 @@
   sysctl:
     name: net.core.bpf_jit_harden
     value: '2'
-    sysctl_file: /etc/sysctl.conf
     state: present
     reload: true
   when:
@@ -8856,7 +8499,6 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.kptr_restrict.*$
     patterns: '*.conf'
     file_type: any
@@ -8882,7 +8524,7 @@
   - reboot_required
   - sysctl_kernel_kptr_restrict
 
-- name: Comment out any occurrences of kernel.kptr_restrict from config files
+- name: Comment out any occurrences of kernel.kptr_restrict from /etc/sysctl.d/*.conf files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.kptr_restrict
@@ -8913,7 +8555,6 @@
   sysctl:
     name: kernel.kptr_restrict
     value: '{{ sysctl_kernel_kptr_restrict_value }}'
-    sysctl_file: /etc/sysctl.conf
     state: present
     reload: true
   when:
@@ -8942,7 +8583,6 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.randomize_va_space.*$
     patterns: '*.conf'
     file_type: any
@@ -8961,8 +8601,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SC-30
   - NIST-800-53-SC-30(2)
-  - PCI-DSS-Req-2.2.1
-  - PCI-DSSv4-2.2.3
   - disable_strategy
   - low_complexity
   - medium_disruption
@@ -8970,7 +8608,7 @@
   - reboot_required
   - sysctl_kernel_randomize_va_space
 
-- name: Comment out any occurrences of kernel.randomize_va_space from config files
+- name: Comment out any occurrences of kernel.randomize_va_space from /etc/sysctl.d/*.conf files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.randomize_va_space
@@ -8990,8 +8628,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SC-30
   - NIST-800-53-SC-30(2)
-  - PCI-DSS-Req-2.2.1
-  - PCI-DSSv4-2.2.3
   - disable_strategy
   - low_complexity
   - medium_disruption
@@ -9003,7 +8639,6 @@
   sysctl:
     name: kernel.randomize_va_space
     value: '2'
-    sysctl_file: /etc/sysctl.conf
     state: present
     reload: true
   when:
@@ -9020,8 +8655,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SC-30
   - NIST-800-53-SC-30(2)
-  - PCI-DSS-Req-2.2.1
-  - PCI-DSSv4-2.2.3
   - disable_strategy
   - low_complexity
   - medium_disruption
@@ -9103,9 +8736,9 @@
       line: SELINUX={{ var_selinux_state }}
       state: present
   when:
-  - high_severity | bool
   - low_complexity | bool
   - low_disruption | bool
+  - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - selinux_state | bool
@@ -9118,26 +8751,22 @@
   - NIST-800-53-AC-3(3)(a)
   - NIST-800-53-AU-9
   - NIST-800-53-SC-7(21)
-  - high_severity
   - low_complexity
   - low_disruption
+  - medium_severity
   - no_reboot_needed
   - restrict_strategy
   - selinux_state
 
-- name: Block Disable service avahi-daemon
+- name: Disable service avahi-daemon
   block:
   - name: Disable service avahi-daemon
-    block:
-    - name: Disable service avahi-daemon
-      systemd:
-        name: avahi-daemon.service
-        enabled: 'no'
-        state: stopped
-        masked: 'yes'
-    rescue:
-    - name: Intentionally ignored previous 'Disable service avahi-daemon' failure, service was already disabled
-      meta: noop
+    systemd:
+      name: avahi-daemon.service
+      enabled: 'no'
+      state: stopped
+      masked: 'yes'
+    ignore_errors: 'yes'
   when:
   - disable_strategy | bool
   - low_complexity | bool
@@ -9151,7 +8780,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9161,9 +8789,11 @@
 
 - name: Unit Socket Exists - avahi-daemon.socket
   command: systemctl list-unit-files avahi-daemon.socket
+  args:
+    warn: false
   register: socket_file_exists
   changed_when: false
-  failed_when: socket_file_exists.rc not in [0, 1]
+  ignore_errors: true
   check_mode: false
   when:
   - disable_strategy | bool
@@ -9178,7 +8808,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9206,7 +8835,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9243,7 +8871,7 @@
     package_facts:
       manager: auto
   - name: Enable service fapolicyd
-    systemd:
+    service:
       name: fapolicyd
       enabled: 'yes'
       state: started
@@ -9286,7 +8914,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9294,19 +8921,15 @@
   - no_reboot_needed
   - package_xinetd_removed
 
-- name: Block Disable service xinetd
+- name: Disable service xinetd
   block:
   - name: Disable service xinetd
-    block:
-    - name: Disable service xinetd
-      systemd:
-        name: xinetd.service
-        enabled: 'no'
-        state: stopped
-        masked: 'yes'
-    rescue:
-    - name: Intentionally ignored previous 'Disable service xinetd' failure, service was already disabled
-      meta: noop
+    systemd:
+      name: xinetd.service
+      enabled: 'no'
+      state: stopped
+      masked: 'yes'
+    ignore_errors: 'yes'
   when:
   - disable_strategy | bool
   - low_complexity | bool
@@ -9330,9 +8953,11 @@
 
 - name: Unit Socket Exists - xinetd.socket
   command: systemctl list-unit-files xinetd.socket
+  args:
+    warn: false
   register: socket_file_exists
   changed_when: false
-  failed_when: socket_file_exists.rc not in [0, 1]
+  ignore_errors: true
   check_mode: false
   when:
   - disable_strategy | bool
@@ -9389,7 +9014,6 @@
     state: absent
   tags:
   - CCE-84151-0
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9435,7 +9059,6 @@
   tags:
   - CCE-84142-9
   - NIST-800-171-3.1.13
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9476,7 +9099,6 @@
     state: absent
   tags:
   - CCE-84157-7
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9500,8 +9122,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSS-Req-2.2.2
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - high_severity
   - low_complexity
@@ -9523,7 +9143,6 @@
   tags:
   - CCE-84146-0
   - NIST-800-171-3.1.13
-  - PCI-DSSv4-2.2.4
   - disable_strategy
   - low_complexity
   - low_disruption
@@ -9538,19 +9157,15 @@
   - no_reboot_needed | bool
   - package_telnet_removed | bool
 
-- name: Block Disable service telnet
+- name: Disable service telnet
   block:
   - name: Disable service telnet
-    block:
-    - name: Disable service telnet
-      systemd:
-        name: telnet.service
-        enabled: 'no'
-        state: stopped
-        masked: 'yes'
-    rescue:
-    - name: Intentionally ignored previous 'Disable service telnet' failure, service was already disabled
-      meta: noop
+    systemd:
+      name: telnet.service
+      enabled: 'no'
+      state: stopped
+      masked: 'yes'
+    ignore_errors: 'yes'
   when:
   - disable_strategy | bool
   - high_severity | bool
@@ -9576,9 +9191,11 @@
 
 - name: Unit Socket Exists - telnet.socket
   command: systemctl list-unit-files telnet.socket
+  args:
+    warn: false
   register: socket_file_exists
   changed_when: false
-  failed_when: socket_file_exists.rc not in [0, 1]
+  ignore_errors: true
   check_mode: false
   when:
   - disable_strategy | bool
@@ -9653,19 +9270,15 @@
   - package_squid_removed | bool
   - unknown_severity | bool
 
-- name: Block Disable service squid
+- name: Disable service squid
   block:
   - name: Disable service squid
-    block:
-    - name: Disable service squid
-      systemd:
-        name: squid.service
-        enabled: 'no'
-        state: stopped
-        masked: 'yes'
-    rescue:
-    - name: Intentionally ignored previous 'Disable service squid' failure, service was already disabled
-      meta: noop
+    systemd:
+      name: squid.service
+      enabled: 'no'
+      state: stopped
+      masked: 'yes'
+    ignore_errors: 'yes'
   when:
   - disable_strategy | bool
   - low_complexity | bool
@@ -9685,9 +9298,11 @@
 
 - name: Unit Socket Exists - squid.socket
   command: systemctl list-unit-files squid.socket
+  args:
+    warn: false
   register: socket_file_exists
   changed_when: false
-  failed_when: socket_file_exists.rc not in [0, 1]
+  ignore_errors: true
   check_mode: false
   when:
   - disable_strategy | bool
@@ -9807,8 +9422,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSS-Req-2.2.4
-  - PCI-DSSv4-2.2.6
   - high_severity
   - low_complexity
   - low_disruption
@@ -9928,7 +9541,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSSv4-2.2.6
   - low_complexity
   - low_disruption
   - medium_severity
@@ -9993,8 +9605,6 @@
   - NIST-800-53-CM-7(b)
   - NIST-800-53-IA-2
   - NIST-800-53-IA-2(5)
-  - PCI-DSS-Req-2.2.4
-  - PCI-DSSv4-2.2.6
   - low_complexity
   - low_disruption
   - medium_severity
@@ -10114,8 +9724,6 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
-  - PCI-DSS-Req-2.2.4
-  - PCI-DSSv4-2.2.6
   - low_complexity
   - low_disruption
   - medium_severity
@@ -10228,8 +9836,9 @@
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   tags:
   - CCE-90804-6
+  - NIST-800-53-AC-17(a)
   - NIST-800-53-AC-9
-  - NIST-800-53-AC-9(1)
+  - NIST-800-53-CM-6(a)
   - low_complexity
   - low_disruption
   - medium_severity
