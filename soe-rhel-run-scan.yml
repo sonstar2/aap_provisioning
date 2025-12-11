@@ -3,12 +3,14 @@
   hosts: "{{ create_vm_vm_name | default(omit) }}"
   become: true
   become_method: sudo
+  collections:
+    - demo.compliance
 
   tasks: 
 
     - name: Run Openscap Scan
       ansible.builtin.include_role:
-        name: demo.compliance.openscap-scanner
+        name: openscap-scanner
       vars:
         openscap_profile: xccdf_org.ssgproject.content_profile_{{ compliance_profile | lower }}
 
