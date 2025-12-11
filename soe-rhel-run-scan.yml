@@ -12,7 +12,6 @@
       vars:
         openscap_profile: xccdf_org.ssgproject.content_profile_{{ compliance_profile | lower }}
 
-
     - name: Fetch report to controller
       ansible.builtin.fetch:
         src: "/tmp/oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
