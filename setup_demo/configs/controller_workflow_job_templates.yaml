@@ -256,4 +256,222 @@ controller_workflows:
           variable: change_type
           question_name: !unsafe "Change Type"
       description: ""
-
+  # - name: "End to End Provisioning - OCP"
+  #   description: !unsafe 'A workflow to deploy a cloud stack'
+  #   organization: "{{ customer_org_name }}"
+  #   simplified_workflow_nodes:
+  #     - identifier: "337705b4-c321-4e4b-9c2f-1a9fb6de36d7"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Create Incident Ticket"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #     - identifier: "Update SNOW CMDB"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Create SNOW CI"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       success_nodes:
+  #         - "Inventory Sync"
+  #       failure_nodes:
+  #         - "6c419508-9ed3-43bf-8528-7381b1d46464"
+  #     - identifier: "Create Keypair"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Cloud / AWS / Create Keypair"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       success_nodes:
+  #         - "EC2 Stats"
+  #       failure_nodes:
+  #         - "a8ceca2c-24bd-4d1c-ad20-86f5f53b2db5"
+  #     - identifier: "Inventory Sync"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "now"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       success_nodes:
+  #         - "Install Web Application"
+  #     - identifier: "1c19537c-ee77-4169-9f26-3fa4486e9f06"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Create SNOW Change Record"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       success_nodes:
+  #         - "Create VPC"
+  #         - "Create Keypair"
+  #     - identifier: "Install Web Application"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Create Web Application"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       success_nodes:
+  #         - "1c3bb844-298c-4c80-bc22-3c823c3319b7"
+  #       failure_nodes:
+  #         - "6c419508-9ed3-43bf-8528-7381b1d46464"
+  #     - identifier: "EC2 Stats"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Cloud / AWS / Display EC2 Stats"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "True"
+  #       always_nodes:
+  #         - "Deploy VM on OCP-V"
+  #       failure_nodes:
+  #         - "6c419508-9ed3-43bf-8528-7381b1d46464"
+  #     - identifier: "1c3bb844-298c-4c80-bc22-3c823c3319b7"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Security Harden"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       always_nodes:
+  #         - "2fc31373-8f29-4fdc-8464-bc8d8d745dd8"
+  #       failure_nodes:
+  #         - "6c419508-9ed3-43bf-8528-7381b1d46464"
+  #     - identifier: "a8ceca2c-24bd-4d1c-ad20-86f5f53b2db5"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Create Incident Ticket"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #     - identifier: "2fc31373-8f29-4fdc-8464-bc8d8d745dd8"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Close SNOW Change Record"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #     - identifier: "Deploy VM on OCP-V"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "OpenShift / CNV / Create RHEL VM"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       # extra_data:
+  #       #   vm_name: dstg
+  #       #   vm_namespace: aap
+  #       #   create_vm_vm_deployment: dev
+  #       #   create_vm_vm_purpose: demo
+  #       #   create_vm_vm_environment: Dev
+  #       #   vm_blueprint: rhel9
+  #       #   create_vm_aws_vpc_subnet_name: aws-test-subnet
+  #       #   create_vm_aws_securitygroup_name: aws-test-sg
+  #       #   create_vm_aws_keypair_name: aws-test-key
+  #       always_nodes:
+  #         - "Update SNOW CMDB"
+  #       failure_nodes:
+  #         - "6c419508-9ed3-43bf-8528-7381b1d46464"
+  #     - identifier: "Create VPC"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Cloud / AWS / Create VPC"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #       success_nodes:
+  #         - "EC2 Stats"
+  #       failure_nodes:
+  #         - "337705b4-c321-4e4b-9c2f-1a9fb6de36d7"
+  #     - identifier: "6c419508-9ed3-43bf-8528-7381b1d46464"
+  #       workflow_job_template: "End to End Provisioning"
+  #       unified_job_template: "Create Incident Ticket"
+  #       limit: ""
+  #       organization: "{{ customer_org_name }}"
+  #       all_parents_must_converge: "False"
+  #   ask_variables_on_launch: "False"
+  #   allow_simultaneous: "False"
+  #   scm_branch: ""
+  #   limit: ""
+  #   ask_limit_on_launch: false
+  #   ask_inventory_on_launch: false
+  #   webhook_service: ""
+  #   extra_vars:
+  #     vm_deployment: cloud_stack
+  #   survey_enabled: true
+  #   survey_spec:
+  #     name: ""
+  #     spec:
+  #       - max: 1024
+  #         min: 0
+  #         type: text
+  #         required: True
+  #         variable: create_vm_vm_name
+  #         new_question: True
+  #         question_name: !unsafe "VM Name"
+  #       - max: 1024
+  #         min: 0
+  #         type: multiplechoice
+  #         choices:
+  #           - rhel8
+  #           - rhel9
+  #           - windows 2019
+  #         default: !unsafe "rhel9"
+  #         required: True
+  #         variable: vm_blueprint
+  #         new_question: True
+  #         question_name: !unsafe "VM Blueprint"
+  #       - type: multiplechoice
+  #         choices:
+  #           - us-east-1
+  #           - us-east-2
+  #           - us-west-1
+  #           - us-west-2
+  #         required: True
+  #         variable: create_vm_aws_region
+  #         question_name: !unsafe "AWS Region"
+  #       - type: text
+  #         required: True
+  #         variable: create_vm_aws_owner_tag
+  #         question_name: !unsafe "Owner"
+  #       - type: multiplechoice
+  #         choices:
+  #           - Dev
+  #           - QA
+  #           - Prod
+  #         required: True
+  #         variable: vm_environment
+  #         question_name: !unsafe "Environment"
+  #       - max: 1024
+  #         min: 0
+  #         type: textarea
+  #         default: !unsafe "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQD1oNFxcplmrynqi4geTSspD6cdqsUDCa7K8agf+jT52FoiKwwkf/NORIlsgiyQ7StkB+PhKDP5zI3cnAhRL8hgdMUfGdYf0PKbExBOCq5EogtnKZYkzLL8ZQs/XSa9I8RJ+k1EnTZhoGemKL+cfpnjOmjptznOjWAbeBuSOux2R8nWtvpB96yBQl0vUO3ooijWPsuNFnDgvnp6aP58N+o6UIh5LkwpL/hj8XWdTCm6iyoChmK4kn36GfbF9myQ2MyDP+/eu8j5ThwYUbaeXVk+pdPfujNx2nJ1hBNDNtGJWHChet1H6UkW1dF82BwTDHogO/s+bmVek4t+yZwuc1L2B6uVqKVuh5hV+VE0DHTriQidR4kQaqz6mGg3Nr9Jwbg4iRFIgPBbKFra6pcpkxBHVD4wiFLToeJkmlXjaHqO02TD1acBymrgxT+12Faj4Zchhm0N5gkrVz8y+VHkN6cuVC5W0s4PYuJnONCP0XyHEBbL3UBJUQYEze4UDANYvFsVpacnEv63ntJ9b7xZzl6Hl96fK2iJpYNnYH4CUmffL4jzZGq0Y+obrGj7f7bu3QkJjIsQEO7lH/oDuIKFWe/CWIZ9wsGZGFM9uCqyLQywZo0OHQcHxKPoZ9Fx0ozGyQNZ9TiukqJNw9TJQTwAjPg/QKs7zatKzS4fn+UHsFTSWw== fredson@Fredericks-MBP.modem"
+  #         required: True
+  #         variable: aws_public_key
+  #         new_question: False
+  #         question_name: !unsafe "Keypair Public Key"
+  #       - max: 1024
+  #         min: 0
+  #         type: text
+  #         default: !unsafe "fredson@redhat.com"
+  #         required: True
+  #         variable: email
+  #         new_question: False
+  #         question_name: !unsafe "Email"
+  #       - type: multiplechoice
+  #         choices:
+  #           - cis
+  #           - e8
+  #           - stig          
+  #         required: True
+  #         variable: compliance_profile
+  #         question_name: !unsafe "Security Compliance Profile"   
+  #       - type: multiplechoice
+  #         choices:
+  #           - Web
+  #           - Database
+  #           - Middleware
+  #         required: True
+  #         variable: app_name
+  #         question_name: !unsafe "Application"
+  #       - type: multiplechoice
+  #         choices:
+  #           - Normal
+  #           - Standard
+  #         default: "Standard"
+  #         required: True
+  #         variable: change_type
+  #         question_name: !unsafe "Change Type"
+  #     description: ""

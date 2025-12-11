@@ -1,0 +1,38 @@
+---
+- name: Apply {{ compliance_profile_id }} Benchmark security/compliance hardenning to the NEW RHEL 9 VM 
+  hosts: all
+  become: true
+  become_method: sudo
+  collections:
+    - rhdemo.compliance
+
+  tasks: 
+
+    - name: Run Openscap Scan
+      ansible.builtin.include_role:
+        name: openscap-scanner
+      vars:
+        openscap_profile: xccdf_org.ssgproject.content_profile_{{ compliance_profile_id | lower }}
+
+
+    - name: Fetch report to controller
+      ansible.builtin.fetch:
+        src: "/tmp/oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
+        dest: "./oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
+        flat: true
+
+    - name: copy report to bastion 
+      ansible.builtin.copy:
+        src: "./oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
+        dest: "/home/{{ v_bastion_user }}/"
+      delegate_to: ec2-54-252-199-177.ap-southeast-2.compute.amazonaws.com
+      vars:
+        ansible_port: "{{ v_bastion_port }}"
+        ansible_user: "{{ v_bastion_user }}"
+        ansible_ssh_pass: "{{ v_bastion_pass }}"
+        ansible_become_pass: "{{ v_bastion_pass }}"
+
+    - ansible.builtin.file:
+        path: "./oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
+        state: absent
+
