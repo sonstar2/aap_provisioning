@@ -1,5 +1,5 @@
 ---
-- name: Apply {{ compliance_profile_id }} Benchmark security/compliance hardenning to the NEW RHEL 9 VM 
+- name: Apply {{ compliance_profile }} Benchmark security/compliance hardenning to the NEW RHEL 9 VM 
   hosts: "{{ create_vm_vm_name | default(omit) }}"
   become: true
   become_method: sudo
@@ -10,7 +10,7 @@
       ansible.builtin.include_role:
         name: demo.compliance.openscap-scanner
       vars:
-        openscap_profile: xccdf_org.ssgproject.content_profile_{{ compliance_profile_id | lower }}
+        openscap_profile: xccdf_org.ssgproject.content_profile_{{ compliance_profile | lower }}
 
 
     - name: Fetch report to controller
