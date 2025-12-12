@@ -16,17 +16,17 @@
 
     - name: Fetch report to controller
       ansible.builtin.fetch:
-        src: "/tmp/oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
-        dest: "./oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
+        src: "/tmp/oscap-report-{{ inventory_hostname }}-{{ v_stage }}.html"
+        dest: "./oscap-report-{{ inventory_hostname }}-{{ v_stage }}.html"
         flat: true
 
     - name: copy report to Report Server 
       ansible.builtin.copy:
-        src: "./oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
-        dest: "/var/www/html/oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
+        src: "./oscap-report-{{ inventory_hostname }}-{{ v_stage }}.html"
+        dest: "/var/www/html/oscap-report-{{ inventory_hostname }}-{{ v_stage }}.html"
         mode: "0664"
       delegate_to: "{{ report_server }}"
 
     - ansible.builtin.file:
-        path: "./oscap-report-{{ ansible_nodename }}-{{ v_stage }}.html"
+        path: "./oscap-report-{{ inventory_hostname }}-{{ v_stage }}.html"
         state: absent
