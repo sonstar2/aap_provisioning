@@ -1,7 +1,6 @@
 ---
 - name: Apply {{ compliance_profile }} Benchmark security/compliance hardenning to the NEW RHEL 9 VM 
-#  hosts: "{{ v_hostname_fqdn }}"
-  hosts: all
+  hosts: "{{ create_vm_vm_name | default(omit) }}"
   become: true
   become_method: sudo
   collections:
